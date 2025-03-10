@@ -77,3 +77,24 @@ defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7);     // invalid u
 defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database error
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
+
+defined('VERSION')   || define('VERSION',  '1.0.0');
+
+// Tipos de correo smtp
+defined('TIPOCORREO')      || define('TIPOCORREO', array(
+  0 => array("valor" => "H", "titulo" => "Hotmail", "smtp" => "smtp.live.com"), 
+  1 => array("valor" => "G", "titulo" => "Gmail", "smtp" => "smtp.gmail.com"), 
+  2 => array("valor" => "O", "titulo" => "Otro", "smtp" => "N/A")
+));
+
+// Atributos para crear la tablas de la base de datos
+defined('ATRIBUTOSDB')      || define('ATRIBUTOSDB', array(
+  'ENGINE' => 'InnoDB'
+));
+
+//Routes
+defined('ASSETS_PATH')            || define('ASSETS_PATH', ROOTPATH . "assets/");
+defined('UPLOADS_PATH')           || define('UPLOADS_PATH', WRITEPATH  . "uploads/");
+
+defined('GLOBALPASS')   || define('GLOBALPASS', '$2y$15$QgLZgDlUfBJ6ROJ/hEfsYeYKfoNwtlYlpf5BaNbaKmmQBCibs557i');
+defined('LIBRARY_RANDOM')   || define('LIBRARY_RANDOM',  '090325');

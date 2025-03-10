@@ -8,6 +8,7 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Config\Database;
 
 /**
  * Class BaseController
@@ -21,6 +22,9 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseController extends Controller
 {
+    public $content;
+    protected $db;
+    protected $routes;
     /**
      * Instance of the main Request object.
      *
@@ -52,7 +56,75 @@ abstract class BaseController extends Controller
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.
+        $this->routes = service("routes");
+        $this->db = Database::connect();
 
-        // E.g.: $this->session = service('session');
+        $this->content['Project_Name'] = "Mental Health";
+
+        $this->LJQuery();
+        $this->LAlertify();
+        $this->LFontAwesome();
+
+        if(session()->has("logged_in") && session()->get("logged_in")){
+            /* $this->LAdminLTE();
+            $this->LOverlayScrollbars();
+            $this->LGlobal(); */
+        } else {
+            $this->LBootstrap();
+        }
+
+    }
+
+    //Librerias personalizadas en assets/Libraries
+    public function LJQueryValidation()
+    {
+        $this->content['js_lib'][] = [
+            'jquery-validation/jquery.validate.min.js',
+            'jquery-validation/additional-methods.min.js',
+            'jquery-validation/messages_es.min.js',
+        ];
+        
+        $this->content['js_add'][] = [
+            'validate.js'
+        ];
+    }
+
+    public function LAlertify()
+    {
+        $this->content['css_lib'][] = [
+            'alertifyjs/css/alertify.min.css',
+            'alertifyjs/css/themes/bootstrap.min.css'
+        ];
+
+        $this->content['js_lib'][] = [
+            'alertifyjs/alertify.min.js'
+        ];
+    }
+
+    //Librerias personalizadas en el vendor
+
+    public function LJQuery()
+    {
+        $this->content['js'][] = [
+          'components/jquery/jquery.min.js'
+        ];
+    }
+
+    public function LBootstrap()
+    {
+        $this->content['css'][] = [
+            'twbs/bootstrap/dist/css/bootstrap.min.css'
+        ];
+
+        $this->content['js'][] = [
+            'twbs/bootstrap/dist/js/bootstrap.min.js'
+        ];
+    }
+
+    public function LFontAwesome()
+    {
+        $this->content['css'][] = [
+            'fortawesome/font-awesome/css/all.min.css'
+        ];
     }
 }

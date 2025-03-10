@@ -1,0 +1,194 @@
+:root {
+  --input-padding-x: 1.5rem;
+  --input-padding-y: 0.75rem;
+}
+
+.login {
+  min-height: 100vh;
+}
+
+.login-background {
+  background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 30, 50, 1));
+}
+
+.btn-login {
+  font-size: 0.9rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
+  border-radius: 2rem;
+}
+
+.form-label-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.form-label-group > input,
+.form-label-group > label,
+.input-group > input,
+.input-group > label {
+  height: 3.125rem;
+  border-radius: 2rem;
+  padding: var(--input-padding-y) var(--input-padding-x);
+}
+
+.form-label-group > label,
+.input-group > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0; /* Override default `<label>` margin */
+  line-height: 1.5;
+  color: #495057;
+  pointer-events: none;
+  cursor: text; /* Match the input under the label */
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  z-index: 3;
+  transition: all .1s ease-in-out;
+}
+
+.form-label-group input::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input:-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-moz-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::placeholder {
+  color: transparent;
+}
+
+.form-label-group input:not(:placeholder-shown) {
+  padding-top: 1.25rem;
+  padding-bottom: .25rem;
+}
+
+.form-label-group input:not(:placeholder-shown) ~ label {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+  font-size: 12px;
+  color: #777;
+}
+
+.form-label-group .input-group-text, .form-label-group .btn {
+  border-radius: 2rem;
+  padding: var(--input-padding-y) 20px;
+}
+
+/* Fallback for Edge
+-------------------------------------------------- */
+@supports (-ms-ime-align: auto) {
+  .form-label-group > label {
+    display: none;
+  }
+  .form-label-group input::-ms-input-placeholder {
+    color: #777;
+  }
+}
+
+/* Fallback for IE
+-------------------------------------------------- */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .form-label-group > label {
+    display: none;
+  }
+  .form-label-group input:-ms-input-placeholder {
+    color: #777;
+  }
+}
+
+
+
+/* ============ Efecto de cargando ===================== */
+
+#loading, #loadingHttp {  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100000;
+  cursor: wait;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#loadingHttp {
+  background-color: transparent;
+}
+
+@media(max-width: 767px) {
+  #loading, #loadingHttp {
+    background: rgba( 255, 255, 255, .8 ) url("../img/loading.gif") 50% 50% no-repeat;
+  }
+
+  .box-loading{
+    display: none;
+  }
+}
+
+.box-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 150px;
+  height: 150px;
+  opacity: 1.5 !important;
+}
+
+.box-loading > div {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.box-loading img{
+  margin-top: 35px;
+}
+
+.loader {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid transparent;
+  border-top: 8px solid #ff9700;
+  border-bottom: 8px solid #ff9700;
+  border-radius: 100%;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-1 {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid #aca9aa;
+  border-radius: 100%;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-2 {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid transparent;
+  border-top: 8px solid #ff9700;
+  border-bottom: 8px solid #ff9700;
+  border-radius: 100%;
+  animation: rotate 1s linear infinite reverse;
+}
+
+@keyframes rotate {
+  0%{transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+/* ================= Fin efecto cargando =========================== */

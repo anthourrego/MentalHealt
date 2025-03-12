@@ -47,7 +47,7 @@ class User extends Entity
      */
     public function setPassword(string $password)
     {
-        $this->attributes['password'] = password_hash($password, PASSWORD_DEFAULT);
+        $this->attributes['password'] = password_hash($password, PASSWORD_DEFAULT, array("cost" => 15));
         return $this;
     }
 

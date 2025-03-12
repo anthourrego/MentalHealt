@@ -56,13 +56,13 @@
 							</ul>
 						</li>
 						<li class="nav-item">
-              <a href="<?= base_url("admin") ?>" class="nav-link <?= current_url(true)->getSegment((1)) == 'admin' ? 'active' : '' ?>">
+              <a href="<?= base_url("admin") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'admin' && current_url(true)->getSegment(2) == '') ? 'active' : '' ?>">
                 <i class="nav-icon fa-solid fa-house"></i>
                 <p>Inicio</p>
               </a>
             </li>
 						<li class="nav-item">
-              <a href="<?= base_url("admin/Users") ?>" class="nav-link <?= current_url(true)->getSegment((1)) == 'Users' ? 'active' : '' ?>">
+              <a href="<?= base_url("admin/Users") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'admin' && current_url(true)->getSegment(2) == 'Users') ? 'active' : '' ?>">
 								<i class="nav-icon fa-solid fa-users"></i>
                 <p>Usuarios</p>
               </a>

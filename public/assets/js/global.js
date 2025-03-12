@@ -12,13 +12,13 @@ const btnLogout = document.getElementById('btnLogout');
 
 $(document).on({
   ajaxStart: function() {
-    $("#loading").removeClass('d-none');
+    $("#loading, #loadingHttp").removeClass('d-none');
   },
   ajaxStop: function() {
-    $("#loading").addClass('d-none');
+    $("#loading, #loadingHttp").addClass('d-none');
   },
   ajaxError: function(funcion, request, settings){
-    $("#loading").removeClass('d-none');
+    $("#loading, #loadingHttp").removeClass('d-none');
     if (request && request.responseJSON) {
       if (request.responseJSON.errorsList) {
         alertify.alert(request.responseJSON.title || "Error", request.responseJSON.errorsList, function(){
@@ -41,7 +41,7 @@ $(document).on({
 });
 
 window.onerror = function() {
-  $("#loading").addClass('d-none');
+  $("#loading, #loadingHttp").addClass('d-none');
 };
 
 document.addEventListener('DOMContentLoaded', function() {

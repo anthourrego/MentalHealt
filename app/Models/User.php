@@ -47,6 +47,7 @@ class User extends Model
 
 	// Validation
 	protected $validationRules      = [
+		'id'         => "permit_empty|is_natural_no_zero",
 		'email'      => 'required|valid_email|is_unique[User.email,id,{id}]',
 		'password'   => 'required|min_length[8]',
 		'first_name' => 'required|alpha_space|min_length[2]|max_length[255]',
@@ -107,7 +108,7 @@ class User extends Model
 			return $data;
 		}
 
-		$data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
+		$data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT, array("cost" => 15));
 		
 		return $data;
 	}

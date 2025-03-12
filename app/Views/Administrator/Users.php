@@ -81,27 +81,31 @@
               </select>
             </div>
             <div class="col-6 form-group form-group-edit">
-              <label class="mb-0" for="estado">Estado</label>
-              <input class="form-control" id="estado" disabled>
+              <label class="mb-0" for="status">Estado</label>
+              <input class="form-control" id="status" disabled>
             </div>
             <div class="col-6 form-group form-group-edit">
-              <label class="mb-0" for="fechaLog">Ultimo login</label>
-              <input class="form-control" id="fechaLog" disabled>
+              <label class="mb-0" for="email_confirm">Email Confirmado</label>
+              <input class="form-control" id="email_confirm" disabled>
             </div>
             <div class="col-6 form-group form-group-edit">
-              <label class="mb-0" for="fechaMod">Fecha modificación</label>
-              <input class="form-control" id="fechaMod" disabled>
+              <label class="mb-0" for="dateLog">Ultimo login</label>
+              <input class="form-control" id="dateLog" disabled>
             </div>
             <div class="col-6 form-group form-group-edit">
-              <label class="mb-0" for="fechaCre">Fecha creación</label>
-              <input class="form-control" id="fechaCre" disabled>
+              <label class="mb-0" for="dateMod">Fecha modificación</label>
+              <input class="form-control" id="dateMod" disabled>
+            </div>
+            <div class="col-6 form-group form-group-edit">
+              <label class="mb-0" for="dateCre">Fecha creación</label>
+              <input class="form-control" id="dateCre" disabled>
             </div>
           </div>
           <div class="form-row">
             <div class="col-6 form-group form-valid">
               <label class="mb-0" for="pass">Contraseña <span class="text-danger">*</span></label>
               <div class="input-group">
-                <input type="password" required id="pass" placeholder="******" minlength="1" maxlength="255" name="pass" class="form-control onlyLetters" autocomplete="off">
+                <input type="password" required id="pass" placeholder="******" minlength="8" maxlength="255" name="pass" class="form-control onlyLetters" autocomplete="off">
                 <div class="input-group-append">
                   <button class="btn btn-secondary btn-pass" type="button"><i class="fas fa-eye"></i></button>
                 </div>
@@ -110,7 +114,7 @@
             <div class="col-6 form-group form-valid">
               <label class="mb-0" for="RePass">Confirmar Contraseña <span class="text-danger">*</span></label>
               <div class="input-group">
-                <input type="password" required id="RePass" placeholder="******" minlength="1" maxlength="255" name="RePass" class="form-control onlyLetters" autocomplete="off">
+                <input type="password" required id="RePass" placeholder="******" minlength="8" maxlength="255" name="RePass" class="form-control onlyLetters" autocomplete="off">
                 <div class="input-group-append">
                   <button class="btn btn-secondary btn-pass" type="button"><i class="fas fa-eye"></i></button>
                 </div>
@@ -122,6 +126,46 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-success" form="formUser"><i class="fas fa-save"></i> Guardar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="changePassModal"  data-backdrop="static" data-keyboard="false" aria-labelledby="changePassModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePassModalLabel">Cambiar contraseña</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formPass">
+          <input type="hidden" name="id">
+          <div class="form-group form-valid">
+            <label class="mb-0" for="formPassPass">Contraseña <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="password" required id="formPassPass" placeholder="******" minlength="8" maxlength="255" name="pass" class="form-control onlyLetters">
+              <div class="input-group-append">
+                <button class="btn btn-secondary btn-pass" type="button"><i class="fas fa-eye"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group form-valid">
+            <label class="mb-0" for="formPassRePass">Confirmar Contraseña <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="password" required id="formPassRePass" placeholder="******" minlength="8" maxlength="255" name="RePass" class="form-control onlyLetters">
+              <div class="input-group-append">
+                <button class="btn btn-secondary btn-pass" type="button"><i class="fas fa-eye"></i></button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" form="formPass"><i class="fas fa-save"></i> Guardar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-close"></i> Cerrar</button>
       </div>
     </div>
   </div>

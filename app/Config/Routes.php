@@ -32,6 +32,9 @@ $routes->group('admin', ['filter' => 'profile:admin'], function($routes) {
       $routes->post('DT', [Users::class, 'listaDT']);
       $routes->delete('Delete/(:num)', [[Users::class, 'delete'], "$1"]);
       $routes->put('ChangeStatus/(:num)', [[Users::class, 'changeStatus'], "$1"]);
+      $routes->post('Create', [Users::class, 'create']);
+      $routes->put('Update/(:num)', [[Users::class, 'update'], "$1"]);
+      $routes->put('ChangePass/(:num)', [[Users::class, 'changePassword'], "$1"]);
     });
   });
 });

@@ -1,0 +1,81 @@
+/* ============ Efecto de cargando ===================== */
+
+#loading, #loadingHttp {  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100000;
+  cursor: wait;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#loadingHttp {
+  background-color: transparent;
+}
+
+@media(max-width: 767px) {
+  #loading, #loadingHttp {
+    background: rgba( 255, 255, 255, .8 ) url("../img/loading.gif") 50% 50% no-repeat;
+  }
+
+  .box-loading{
+    display: none;
+  }
+}
+
+.box-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 150px;
+  height: 150px;
+  opacity: 1.5 !important;
+}
+
+.box-loading > div {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.box-loading img{
+  margin-top: 35px;
+}
+
+.loader {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid transparent;
+  border-top: 8px solid #007bff;
+  border-bottom: 8px solid #007bff;
+  border-radius: 100%;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-1 {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid #aca9aa;
+  border-radius: 100%;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-2 {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid transparent;
+  border-top: 8px solid #007bff;
+  border-bottom: 8px solid #007bff;
+  border-radius: 100%;
+  animation: rotate 1s linear infinite reverse;
+}
+
+@keyframes rotate {
+  0%{transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+/* ================= Fin efecto cargando =========================== */

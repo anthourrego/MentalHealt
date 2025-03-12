@@ -22,12 +22,10 @@ class Users extends BaseController
 		$this->LDataTables();
 		$this->LMoment();
 		$this->LFancybox();
+		$this->LJQueryValidation();
 
 		$this->content['title'] = "Usuarios";
 		$this->content['view'] = "Administrator/Users";
-		/* $this->content['css_add'][] = [
-			'login.css'
-		]; */
 
 		$this->content['js_add'][] = [
 			'users.js'
@@ -152,5 +150,94 @@ class Users extends BaseController
 		header("Content-Disposition: inline; filename='{$filename}';"); //<-- sends filename header
 		readfile($filename); //<--reads and outputs the file onto the output buffer
 		exit(); // or die()
+	}
+
+	public function create() {
+		$dataPost = (object) $this->request->getPost();
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo crear el usuario'
+		];
+
+		$data = [
+			'email' => $dataPost->email,
+			'first_name' => $dataPost->first_name,
+			'last_name' => $dataPost->last_name,
+			'profile' => $dataPost->profile,
+			'status' => 1,
+			"email_confirm" => 0,
+			'password' => $dataPost->pass
+		];
+
+		$user = $this->userModel->insert($data);
+
+		if ($user && empty($this->userModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Usuario creado correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->userModel->errors());
+		}
+
+		return $this->respond($resp, 400);
+	}
+
+	public function update($idUser){
+		$dataRequest = (object) $this->request->getRawInput();
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo actualizar el usuario'
+		];
+
+		$data = [
+			'id' => $idUser,
+			'email' => $dataRequest->email,
+			'first_name' => $dataRequest->first_name,
+			'last_name' => $dataRequest->last_name,
+			'profile' => $dataRequest->profile
+		];
+
+		$user = $this->userModel->update($idUser, $data);
+
+		if ($user && empty($this->userModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Usuario actualizado correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->userModel->errors());
+		}
+
+		return $this->respond($resp, 400);
+
+	}
+
+	public function changePassword($idUser) {
+		$dataRequest = (object) $this->request->getRawInput();
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo cambiar la contraseña del usuario'
+		];
+
+		$data = [
+			'password' => $dataRequest->pass
+		];
+
+		$user = $this->userModel->update($idUser, $data);
+
+		if ($user && empty($this->userModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Contraseña del usuario cambiada correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->userModel->errors());
+		}
+
+		return $this->respond($resp, 400);
 	}
 }

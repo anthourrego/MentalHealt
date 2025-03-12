@@ -112,6 +112,16 @@ abstract class BaseController extends Controller
         ];
     }
 
+    public function LLightbox(){
+        $this->content['css_lib'][] = [
+            'lightbox/lightbox.min.css'
+        ];
+
+        $this->content['js_lib'][] = [
+            'lightbox/lightbox.min.js'
+        ];
+    }
+
     //Librerias personalizadas en el vendor
 
     public function LJQuery()
@@ -147,6 +157,38 @@ abstract class BaseController extends Controller
         $this->content['js'][] = [
             'twbs/bootstrap/dist/js/bootstrap.bundle.min.js'
             ,'almasaeed2010/adminlte/dist/js/adminlte.min.js'
+        ];
+    }
+
+    public function LDataTables(){
+        $this->content['css'][] = [
+            'datatables.net/datatables.net-bs4/css/dataTables.bootstrap4.min.css'
+            ,'datatables.net/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css'
+        ];
+
+        $this->content['js'][] = [
+            'datatables.net/datatables.net/js/dataTables.min.js'
+            ,'datatables.net/datatables.net-bs4/js/dataTables.bootstrap4.min.js'
+            ,'datatables.net/datatables.net-buttons/js/dataTables.buttons.min.js'
+            ,'datatables.net/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'
+            ,'stuk/jszip/dist/jszip.min.js'
+            ,'bpampuch/pdfmake/build/pdfmake.min.js'
+            ,'bpampuch/pdfmake/build/vfs_fonts.js'
+            ,'datatables.net/datatables.net-buttons/js/buttons.html5.min.js'
+            ,'datatables.net/datatables.net-buttons/js/buttons.print.min.js'
+            ,'datatables.net/datatables.net-scroller/js/dataTables.scroller.min.js'
+            ,'datatables.net/datatables.net-select/js/dataTables.select.min.js'
+        ];
+
+        $this->content['js_add'][] = [
+            'DataTables.js'
+        ];
+    }
+
+    public function LMoment(){
+        $this->content['js'][] = [
+            'moment/moment/moment.js',
+            'moment/moment/locale/es-mx.js'
         ];
     }
 

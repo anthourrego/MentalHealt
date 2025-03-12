@@ -169,4 +169,20 @@ class User extends Model
 	{
 		return $this->update($userId, ['email_confirm' => 1]);
 	}
+
+	/**
+	 * Check if email is valid
+	 */
+	public function isValidEmail(string $email, int $id): bool
+	{
+		$this->where('email', $email);
+
+		if (!is_null($id) && $id > 0) {
+			$this->where('id !=', $id);
+		}
+					 
+		$user = $this->first();
+
+		return $user !== null;
+	}
 }

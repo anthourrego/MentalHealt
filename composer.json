@@ -12,12 +12,20 @@
     "require": {
         "php": "^8.1",
         "almasaeed2010/adminlte": "^3.2",
+        "bpampuch/pdfmake": "^0.2.18",
         "codeigniter4/framework": "^4.0",
         "codeigniter4/translations": "^4.6",
         "components/jquery": "^3.7",
+        "datatables.net/datatables.net": "^2.2",
+        "datatables.net/datatables.net-bs4": "^2.2",
+        "datatables.net/datatables.net-buttons": "^3.2",
+        "datatables.net/datatables.net-buttons-bs4": "^3.2",
+        "datatables.net/datatables.net-scroller": "^2.4",
+        "datatables.net/datatables.net-select": "^3.0",
         "fortawesome/font-awesome": "^6.7",
         "hermawan/codeigniter4-datatables": "^0.8.0",
         "moment/moment": "^2.30",
+        "stuk/jszip": "^3.0",
         "twbs/bootstrap": "4.6.2"
     },
     "require-dev": {

@@ -3,12 +3,113 @@
 namespace App\Controllers\Administrator;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\User;
+use CodeIgniter\API\ResponseTrait;
+use \Hermawan\DataTables\DataTable;
 
 class Users extends BaseController
 {
-    public function index()
-    {
-        //
-    }
+	use ResponseTrait; // Para formatear respuestas JSON adecuadamente
+	public $userModel;
+
+	public function __construct()
+	{
+		$this->userModel = new User();
+	}
+
+	public function index()
+	{
+		$this->LDataTables();
+		$this->LMoment();
+		$this->LLightbox();
+
+		$this->content['title'] = "Usuarios";
+		$this->content['view'] = "Administrator/Users";
+		/* $this->content['css_add'][] = [
+			'login.css'
+		]; */
+
+		$this->content['js_add'][] = [
+			'users.js'
+		];
+
+		return view('UI/viewDefault', $this->content);
+	}
+
+	public function listaDT() {
+		$postData = (object) $this->request->getPost();
+		$status = $postData->status;
+		
+		$query = $this->db->table('user AS u')
+			->select("
+				u.id, 
+				u.email, 
+				u.first_name,
+				u.last_name,
+				concat(u.first_name, ' ', u.last_name) As full_name,
+				u.profile,
+				CASE u.profile
+						WHEN '1' THEN 'Administrador'
+						WHEN '2' THEN 'Terapista'
+						WHEN '3' THEN 'Paciente'
+						ELSE 'Sin perfil'
+				END profileDesc,
+				u.status, 
+				CASE u.status
+						WHEN '1' THEN 'Activo'
+						WHEN '0' THEN 'Inactivo'
+						ELSE 'Sin estado'
+				END statusDesc, 
+				u.last_login, 
+				u.email_confirm,
+				CASE email_confirm
+						WHEN '1' THEN 'Confirmado'
+						WHEN '0' THEN 'Sin confirmar'
+						ELSE 'Sin confirmar'
+				END email_confirmDesc,
+				u.created_at,
+				u.updated_at
+			");
+
+		if($status != "-1"){
+			$query->where("u.status", $status);
+		}
+
+		return DataTable::of($query)->toJson(true);
+	}
+
+	public function validEmail()
+	{	
+		$dataPost = (object) $this->request->getPost();
+
+		$resp = [
+			'status' => false,
+			'message' => 'El correo electrónico ya existe'
+		];
+
+		$user = $this->userModel->isValidEmail($dataPost->email, $dataPost->idUser);
+
+		if (!$user) {
+			$resp = [
+				'status' => true,
+				'message' => 'Correo electrónico disponible'
+			];
+		}
+
+		return $this->respond($resp, 200);
+	}
+
+	public function foto($img = null){
+		$filename = UPLOADS_USER_PATH ."{$img}.png"; //<-- specify the image  file
+		//Si la foto no existe la colocamos por defecto
+		if(is_null($img) || !file_exists($filename)){ 
+			$filename = ASSETS_PATH . "img/noPhoto.png";
+		}
+		//$mime = mime_content_type($filename); //<-- detect file type
+		header('Content-Length: '.filesize($filename)); //<-- sends filesize header
+		header("Content-Type: image/png"); //<-- send mime-type header
+		header("Content-Disposition: inline; filename='{$filename}';"); //<-- sends filename header
+		readfile($filename); //<--reads and outputs the file onto the output buffer
+		exit(); // or die()
+	}
 }

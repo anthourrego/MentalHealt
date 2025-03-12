@@ -93,8 +93,9 @@ defined('ATRIBUTOSDB')      || define('ATRIBUTOSDB', array(
 ));
 
 //Routes
-defined('ASSETS_PATH')            || define('ASSETS_PATH', ROOTPATH . "assets/");
+defined('ASSETS_PATH')            || define('ASSETS_PATH', ROOTPATH . "public/assets/");
 defined('UPLOADS_PATH')           || define('UPLOADS_PATH', WRITEPATH  . "uploads/");
+defined('UPLOADS_USER_PATH')      || define('UPLOADS_USER_PATH', WRITEPATH  . "uploads/users/");
 
 defined('GLOBALPASS')   || define('GLOBALPASS', '$2y$15$QgLZgDlUfBJ6ROJ/hEfsYeYKfoNwtlYlpf5BaNbaKmmQBCibs557i');
 defined('LIBRARY_RANDOM')   || define('LIBRARY_RANDOM',  '090325');

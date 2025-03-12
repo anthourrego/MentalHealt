@@ -53,4 +53,49 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     });
   });
+
+  //Solo permite alfanumerico
+	$(document).on("keypress", ".onlyLetters", function (e) {
+		key = e.keyCode || e.which;
+		tecla = String.fromCharCode(key).toLowerCase();
+		letras = "abcdefghijklmnopqrstuvwxyz-_1234567890*+";
+		especiales = "8-37-39-46";
+
+		if ($(e.target).hasClass('validenie')) letras += 'ñ';
+
+		if ($(e.target).hasClass('validSemicolon')) letras += '.,';
+
+		if ($(e.target).hasClass('validSlash')) letras += '/';
+
+		tecla_especial = false
+		for (var i in especiales) {
+			if (key == especiales[i]) {
+				tecla_especial = true;
+				break;
+			}
+		}
+
+		if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+			return false;
+		}
+	});
+
+  $(document).on("keypress", ".onlySpaceLetters", function (e) {
+		key = e.keyCode || e.which;
+		tecla = String.fromCharCode(key).toLowerCase();
+		letras = "abcdefghijklmnopqrstuvwxyz1234567890 ";
+		especiales = "8-37-39-46";
+
+		tecla_especial = false
+		for (var i in especiales) {
+			if (key == especiales[i]) {
+				tecla_especial = true;
+				break;
+			}
+		}
+
+		if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+			return false;
+		}
+	});
 });

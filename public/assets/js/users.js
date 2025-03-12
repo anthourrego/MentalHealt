@@ -42,35 +42,95 @@ const DTUser = $("#tblUser").DataTable({
         return moment(data, "YYYY-MM-DD HH:mm:ss").format("DD/MM/YYYY hh:mm:ss A");
       }
     },
-    /* {
+    {
       orderable: false,
       searchable: false,
       defaultContent: '',
       className: 'text-center noExport',
-      render: function (meta, type, data, meta) {
+      render: function (data, type, row) {
 
-        btnEditar = validPermissions(12) ? '<button type="button" class="btn btn-secondary btnEditar" title="Editar"><i class="fa-solid fa-user-pen"></i></button>' : '<button type="button" class="btn btn-dark btnVer" title="Ver"><i class="fa-solid fa-eye"></i></button>';
-
-        btnCambiarPass = validPermissions(13) ? '<button type="button" class="btn btn-warning btnCambiarPass" title="Cambiar Contraseña"><i class="fa-solid fa-user-lock"></i></button>' : '';
-
-        btnPermisos = (data.perfilId == null && validPermissions(15)) ? '<button type="button" class="btn btn-info btnPermisos" title="Permisos"><i class="fa-solid fa-user-shield"></i></button>' : '';
-
-        btnCambiarEstado = validPermissions(14) ? `<button type="button" class="btn btn-${data.estado == "1" ? "danger" : "success"} btnCambiarEstado" title="${data.estado == "1" ? "Ina" : "A"}ctivar"><i class="fa-solid fa-user-${data.estado == "1" ? "large-slash" : "check"}"></i></button>` : '';
+        btnEdit = '<button type="button" class="btn btn-secondary btnEditar" title="Editar"><i class="fa-solid fa-user-pen"></i></button>';
+        btnResetPass = '';
+        /* btnResetPass = '<button type="button" class="btn btn-warning btnCambiarPass" title="Restablecer Contraseña"><i class="fa-solid fa-user-lock"></i></button>'; */
+        btnChangeStatus = `<button type="button" class="btn btn-${row.status == "1" ? "warning" : "success"} btnChangeStatus" title="${row.status == "1" ? "Ina" : "A"}ctivar"><i class="fa-solid fa-user-${row.status == "1" ? "large-slash" : "check"}"></i></button>`;
+        btnDelete = '<button type="button" class="btn btn-danger btnDelete" title="Eliminar"><i class="fa-solid fa-user-xmark"></i></button>';
 
         return `<div class="btn-group btn-group-sm" role="group">
-                  ${btnEditar}
-                  ${btnCambiarPass}
-                  ${btnPermisos}
-                  ${btnCambiarEstado}
+                  ${btnEdit}
+                  ${btnResetPass}
+                  ${btnChangeStatus}
+                  ${btnDelete}
                 </div>`;
       }
-    }, */
+    },
   ],
   createdRow: function (row, data, dataIndex) {
-    
+    $(row).find(".btnDelete").on("click", function () {
+      deleteUser(data.id, data.full_name);
+    });
+
+    $(row).find(".btnChangeStatus").on("click", function () {
+      updateStatusUser(data.id, data);
+    });
   }
 });
 
+const deleteUser = (id, name) => {
+  alertify.confirm(`¿Estás seguro de eliminar al usuario <b>${name}</b>?`, function () {
+    $.ajax({
+      url: generalBase + `Delete/${id}`,
+      type: 'DELETE',
+      dataType: 'json',
+      success: function (resp) {
+        if (resp.status) {
+          alertify.success(resp.message);
+          DTUser.ajax.reload();
+        } else {
+          alertify.error(resp.message);
+        }
+      }
+    });
+  });
+};
+
+const updateStatusUser = (id, userData) => {
+  alertify.confirm(`¿Estás seguro de ${userData.status == "1" ? "Ina" : "A"}ctivar a <b>${userData.full_name}</b>?`, function () {
+    $.ajax({
+      url: generalBase + `ChangeStatus/${id}`,
+      type: 'PUT',
+      data: userData,
+      dataType: 'json',
+      success: function (resp) {
+        if (resp.status) {
+          alertify.success(resp.message);
+          DTUser.ajax.reload();
+        } else {
+          alertify.error(resp.message);
+        }
+      }
+    });
+  });
+};
+
+
+const updateUser = (id, userData) => {
+  alertify.confirm(`¿Estás seguro de actualizar la información del usuario <b>${userData.full_name}</b>?`, function () {
+    $.ajax({
+      url: generalBase + `Update/${id}`,
+      type: 'PUT',  // O 'PATCH' para actualización parcial
+      data: userData,
+      dataType: 'json',
+      success: function (resp) {
+        if (resp.status) {
+          alertify.success(resp.message);
+          DTUser.ajax.reload();
+        } else {
+          alertify.error(resp.message);
+        }
+      }
+    });
+  });
+};
 
 $(document).ready(function() {
   selectStatus.addEventListener('change', function() {

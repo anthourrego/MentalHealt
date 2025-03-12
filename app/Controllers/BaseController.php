@@ -122,6 +122,17 @@ abstract class BaseController extends Controller
         ];
     }
 
+    public function LFancybox(){
+        $this->content['css_lib'][] = [
+            'fancybox/jquery.fancybox.min.css'
+        ];
+
+        $this->content['js_lib'][] = [
+            'fancybox/jquery.fancybox.min.js'
+        ];
+    }
+
+
     //Librerias personalizadas en el vendor
 
     public function LJQuery()
@@ -181,7 +192,7 @@ abstract class BaseController extends Controller
         ];
 
         $this->content['js_add'][] = [
-            'DataTables.js'
+            'dataTables.js'
         ];
     }
 

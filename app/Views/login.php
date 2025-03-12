@@ -14,12 +14,12 @@
               </div>
               <form id="loginForm" class="formValid" autocomplete="off">
                 <div class="form-label-group form-valid">
-                  <input id="email" name="email" type="email" value="anthourrego@gmail.com" minlength="5" class="form-control" placeholder="Correo" required autocomplete="off">
+                  <input id="email" name="email" type="email" value="" minlength="5" class="form-control" placeholder="Correo" required autocomplete="off">
                   <label for="email">Correo</label>
                 </div>
                 <div class="form-label-group form-valid">
                   <div class="input-group">
-                    <input type="password" id="password" name="password" value="123456" minlength="8" class="form-control" placeholder="Contraseña" required autocomplete="off">
+                    <input type="password" id="password" name="password" value="" minlength="8" class="form-control" placeholder="Contraseña" required autocomplete="off">
                     <label for="password">Contraseña</label>
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary btn-pass" type="button">

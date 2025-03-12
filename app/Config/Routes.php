@@ -30,6 +30,8 @@ $routes->group('admin', ['filter' => 'profile:admin'], function($routes) {
     $routes->group('', ['filter' => 'ajax'], function($routes) {
       $routes->post('validEmail', [Users::class, 'validEmail']);
       $routes->post('DT', [Users::class, 'listaDT']);
+      $routes->delete('Delete/(:num)', [[Users::class, 'delete'], "$1"]);
+      $routes->put('ChangeStatus/(:num)', [[Users::class, 'changeStatus'], "$1"]);
     });
   });
 });

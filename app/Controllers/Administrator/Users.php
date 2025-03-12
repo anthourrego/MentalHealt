@@ -21,7 +21,7 @@ class Users extends BaseController
 	{
 		$this->LDataTables();
 		$this->LMoment();
-		$this->LLightbox();
+		$this->LFancybox();
 
 		$this->content['title'] = "Usuarios";
 		$this->content['view'] = "Administrator/Users";
@@ -97,6 +97,47 @@ class Users extends BaseController
 		}
 
 		return $this->respond($resp, 200);
+	}
+
+	public function delete($idUser) {
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo eliminar el usuario'
+		];
+
+		$user = $this->userModel->delete($idUser);
+
+		if ($user) {
+			$resp = [
+				'status' => true,
+				'message' => 'Usuario eliminado correctamente'
+			];
+			return $this->respond($resp, 200);
+		}
+
+		return $this->respond($resp, 400);
+	}
+	public function changeStatus($idUser) {
+		$dataRequest = (object) $this->request->getRawInput();
+		$newStatus = $dataRequest->status == "1" ? "0" : "1";
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo cambiar el estado del usuario'
+		];
+
+		$user = $this->userModel->toggleStatus($idUser, $newStatus);
+
+		if ($user && empty($this->userModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Estado del usuario cambiado correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->userModel->errors());
+		}
+
+		return $this->respond($resp, 400);
 	}
 
 	public function foto($img = null){

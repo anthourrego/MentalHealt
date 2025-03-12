@@ -32,7 +32,7 @@
             <th>Email Confirmado</th>
             <th>Ultimo Login</th>
             <th>Fecha Creación</th>
-            <!-- <th>Acciones</th> -->
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<div class="modal fade modalFormulario" id="modalUser" data-backdrop="static" data-keyboard="false" aria-labelledby="modalUserLabel" aria-hidden="true">
+<div class="modal fade modalFormulario" id="modalUser" data-backdrop="static" data-keyboard="false" aria-labelledby="modalUserLabel">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

@@ -1,6 +1,13 @@
+// Configuración de estilos para los botones de alertify
 alertify.defaults.theme.ok = "btn btn-primary";
 alertify.defaults.theme.cancel = "btn btn-danger";
 alertify.defaults.theme.input = "form-control";
+
+// Configuración de textos para los botones de alertify
+alertify.defaults.glossary.title = "Atención";
+alertify.defaults.glossary.ok = `<i class="fas fa-check"></i> Aceptar`;
+alertify.defaults.glossary.cancel = `<i class="fas fa-times"></i> Cancelar`;
+
 const btnLogout = document.getElementById('btnLogout');
 
 $(document).on({
@@ -24,7 +31,8 @@ $(document).on({
       } else {
         alertify.error('Ocurrió un error inesperado. Por favor, inténtelo de nuevo.');
       }
-      
+    } else {
+      alertify.error('Ocurrió un error inesperado. Por favor, inténtelo de nuevo.');
     }
     console.error(funcion);
     console.error(request);

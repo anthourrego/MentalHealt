@@ -66,9 +66,9 @@ abstract class BaseController extends Controller
         $this->LFontAwesome();
 
         if(session()->has("logged_in") && session()->get("logged_in")){
-            /* $this->LAdminLTE();
+            $this->LAdminLTE();
             $this->LOverlayScrollbars();
-            $this->LGlobal(); */
+            $this->LGlobal();
         } else {
             $this->LBootstrap();
         }
@@ -101,6 +101,17 @@ abstract class BaseController extends Controller
         ];
     }
 
+    public function LOverlayScrollbars()
+    {
+        $this->content['css_lib'][] = [
+            'OverlayScrollbars/css/OverlayScrollbars.min.css'
+        ];
+
+        $this->content['js_lib'][] = [
+            'OverlayScrollbars/js/OverlayScrollbars.min.js'
+        ];
+    }
+
     //Librerias personalizadas en el vendor
 
     public function LJQuery()
@@ -125,6 +136,28 @@ abstract class BaseController extends Controller
     {
         $this->content['css'][] = [
             'fortawesome/font-awesome/css/all.min.css'
+        ];
+    }
+
+    public function LAdminLTE(){
+        $this->content['css'][] = [
+            'almasaeed2010/adminlte/dist/css/adminlte.min.css'
+        ];
+
+        $this->content['js'][] = [
+            'twbs/bootstrap/dist/js/bootstrap.bundle.min.js'
+            ,'almasaeed2010/adminlte/dist/js/adminlte.min.js'
+        ];
+    }
+
+    public function LGlobal()
+    {
+        $this->content['css_add'][] = [
+            'global.css'
+        ];
+
+        $this->content['js_add'][] = [
+            'global.js'
         ];
     }
 }

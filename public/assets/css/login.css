@@ -162,8 +162,8 @@
   width: calc(100% - 0px);
   height: calc(100% - 0px);
   border: 8px solid transparent;
-  border-top: 8px solid #ff9700;
-  border-bottom: 8px solid #ff9700;
+  border-top: 8px solid #007bff;
+  border-bottom: 8px solid #007bff;
   border-radius: 100%;
   animation: rotate 5s linear infinite;
 }
@@ -180,8 +180,8 @@
   width: calc(100% - 0px);
   height: calc(100% - 0px);
   border: 8px solid transparent;
-  border-top: 8px solid #ff9700;
-  border-bottom: 8px solid #ff9700;
+  border-top: 8px solid #007bff;
+  border-bottom: 8px solid #007bff;
   border-radius: 100%;
   animation: rotate 1s linear infinite reverse;
 }

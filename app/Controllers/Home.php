@@ -46,6 +46,29 @@ class Home extends BaseController
 		}
 	}
 
+    public function Administrator() {
+        $this->content['title'] = "Inicio";
+        $this->content['view'] = "Administrator/index";
+        /* $this->content['css_add'][] = [
+            'login.css'
+        ]; */
+
+        /* $this->content['js_add'][] = [
+            'usuarios.js'
+        ]; */
+
+        return view('UI/viewDefault', $this->content);
+    }
+
+    public function Patient(){
+
+    }
+
+    public function Therapist() {
+
+    }
+
+
 	/**
 	 * Procesa el formulario de inicio de sesión mediante Ajax
 	 */
@@ -146,6 +169,7 @@ class Home extends BaseController
 					'email' => $user->email,
 					'first_name' => $user->first_name,
 					'last_name' => $user->last_name,
+                    'full_name' => $user->first_name . ' ' . $user->last_name,
 					'profile' => $user->profile,
 					'logged_in' => true,
 			];
@@ -160,6 +184,27 @@ class Home extends BaseController
 					$this->setRememberMeCookie($user->id);
 			} */
 	}
+
+    /**
+     * Cierra la sesión del usuario - puede ser por Ajax o normal
+     */
+    public function logout()
+    {
+        // Eliminar cookie de "recordarme" si existe
+        /* if (isset($_COOKIE['remember_token'])) {
+            setcookie('remember_token', '', time() - 3600, '/');
+            unset($_COOKIE['remember_token']);
+        } */
+
+        // Destruir la sesión
+        session()->destroy();
+
+        return $this->respond([
+            'status' => 'success',
+            'message' => 'Ha cerrado sesión correctamente',
+            'redirect' => base_url('')
+        ], 200);
+    }
 
     /**
      * Procesa el registro de usuario mediante Ajax
@@ -380,31 +425,6 @@ class Home extends BaseController
         // $this->userTokenModel->deleteConfirmationToken($userId, $token);
 
         return redirect()->to('/login')->with('message', 'Su cuenta ha sido confirmada. Ya puede iniciar sesión.');
-    } */
-
-    /**
-     * Cierra la sesión del usuario - puede ser por Ajax o normal
-     */
-    /* public function logout()
-    {
-        // Eliminar cookie de "recordarme" si existe
-        if (isset($_COOKIE['remember_token'])) {
-            setcookie('remember_token', '', time() - 3600, '/');
-            unset($_COOKIE['remember_token']);
-        }
-
-        // Destruir la sesión
-        session()->destroy();
-
-        if ($this->request->isAJAX()) {
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Ha cerrado sesión correctamente',
-                'redirect' => base_url('login')
-            ], 200);
-        }
-
-        return redirect()->to('/login')->with('message', 'Ha cerrado sesión correctamente');
     } */
 
     /**

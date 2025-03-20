@@ -9,10 +9,6 @@
 			<li class="nav-item d-none border-left <?= (isset($title) ? 'd-sm-inline-block' : '') ?>">
 				<h4 class="nav-link mb-0"><?= (isset($title) ? $title : '') ?></h4>
 			</li>
-
-			<li class="nav-item d-none d-sm-inline-block ml-auto">
-				<b>V</b><?= VERSION ?>
-			</li>
 		</nav>
 		<!-- /.navbar -->
 

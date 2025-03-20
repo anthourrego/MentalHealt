@@ -2,6 +2,7 @@
 
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\Home;
+use App\Controllers\Libraries;
 use App\Controllers\Administrator\Users;
 
 /**
@@ -47,12 +48,5 @@ $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {
   $routes->get('/', [Home::class, 'therapist']);
 });
 
-$routes->get('Library/(:segment)/(:segment)/(:any)', function($package, $lib, $file) {
-  $path = ROOTPATH . "vendor/{$package}/{$lib}/{$file}";
-  if (file_exists($path)) {
-      $type = pathinfo($path, PATHINFO_EXTENSION) === 'js' ? 'application/javascript' : 'text/css';
-      header("Content-Type: {$type}");
-      readfile($path);
-      exit;
-  }
-});
+$routes->get('Library/(:segment)/(:any)', [[Libraries::class, 'getLibrary'], "$1/$2"]);
+

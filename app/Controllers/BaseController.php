@@ -133,62 +133,61 @@ abstract class BaseController extends Controller
     }
 
 
-    //Librerias personalizadas en el vendor
-
+    //Librerias personalizadas en el vendor que estan en el controaldor de Libraries
     public function LJQuery()
     {
         $this->content['js'][] = [
-          'components/jquery/jquery.min.js'
+          'jquery/jquery.min.js'
         ];
     }
 
     public function LBootstrap()
     {
         $this->content['css'][] = [
-            'twbs/bootstrap/dist/css/bootstrap.min.css'
+            'bootstrap/bootstrap.min.css'
         ];
 
         $this->content['js'][] = [
-            'twbs/bootstrap/dist/js/bootstrap.min.js'
+            'bootstrap/bootstrap.min.js'
         ];
     }
 
     public function LFontAwesome()
     {
         $this->content['css'][] = [
-            'fortawesome/font-awesome/css/all.min.css'
+            'fontawesome/all.min.css'
         ];
     }
 
     public function LAdminLTE(){
         $this->content['css'][] = [
-            'almasaeed2010/adminlte/dist/css/adminlte.min.css'
+            'adminLTE/adminlte.min.css'
         ];
 
         $this->content['js'][] = [
-            'twbs/bootstrap/dist/js/bootstrap.bundle.min.js'
-            ,'almasaeed2010/adminlte/dist/js/adminlte.min.js'
+            'bootstrap/bootstrap.bundle.min.js'
+            ,'adminLTE/adminlte.min.js'
         ];
     }
 
     public function LDataTables(){
         $this->content['css'][] = [
-            'datatables.net/datatables.net-bs4/css/dataTables.bootstrap4.min.css'
-            ,'datatables.net/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css'
+            'dataTables-bs4/dataTables.bootstrap4.min.css'
+            ,'dataTables-buttons-bs4/buttons.bootstrap4.min.css'
         ];
 
         $this->content['js'][] = [
-            'datatables.net/datatables.net/js/dataTables.min.js'
-            ,'datatables.net/datatables.net-bs4/js/dataTables.bootstrap4.min.js'
-            ,'datatables.net/datatables.net-buttons/js/dataTables.buttons.min.js'
-            ,'datatables.net/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'
-            ,'stuk/jszip/dist/jszip.min.js'
-            ,'bpampuch/pdfmake/build/pdfmake.min.js'
-            ,'bpampuch/pdfmake/build/vfs_fonts.js'
-            ,'datatables.net/datatables.net-buttons/js/buttons.html5.min.js'
-            ,'datatables.net/datatables.net-buttons/js/buttons.print.min.js'
-            ,'datatables.net/datatables.net-scroller/js/dataTables.scroller.min.js'
-            ,'datatables.net/datatables.net-select/js/dataTables.select.min.js'
+            'dataTables/dataTables.min.js'
+            ,'dataTables-bs4/dataTables.bootstrap4.min.js'
+            ,'dataTables-buttons/dataTables.buttons.min.js'
+            ,'dataTables-buttons-bs4/buttons.bootstrap4.min.js'
+            ,'jszip/jszip.min.js'
+            ,'pdfmake/pdfmake.min.js'
+            ,'pdfmake/vfs_fonts.js'
+            ,'dataTables-buttons/buttons.html5.min.js'
+            ,'dataTables-buttons/buttons.print.min.js'
+            ,'dataTables-scroller/dataTables.scroller.min.js'
+            ,'dataTables-select/dataTables.select.min.js'
         ];
 
         $this->content['js_add'][] = [
@@ -198,8 +197,8 @@ abstract class BaseController extends Controller
 
     public function LMoment(){
         $this->content['js'][] = [
-            'moment/moment/moment.js',
-            'moment/moment/locale/es-mx.js'
+            'moment/moment.js',
+            'moment-locale/es-mx.js'
         ];
     }
 

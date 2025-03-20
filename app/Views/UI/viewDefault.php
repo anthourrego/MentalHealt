@@ -9,4 +9,5 @@
   </section>
 </div>
 
+<?= view("UI/footer"); ?>
 <?= view("UI/scripts"); ?>

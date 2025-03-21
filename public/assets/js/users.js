@@ -68,10 +68,12 @@ const DTUser = $("#tblUser").DataTable({
         btnResetPass = '<button type="button" class="btn btn-dark btnChangePass" title="Cambiar Contraseña"><i class="fa-solid fa-user-lock"></i></button>';
         btnChangeStatus = `<button type="button" class="btn btn-${row.status == "1" ? "warning" : "success"} btnChangeStatus" title="${row.status == "1" ? "Ina" : "A"}ctivar"><i class="fa-solid fa-user-${row.status == "1" ? "large-slash" : "check"}"></i></button>`;
         btnDelete = '<button type="button" class="btn btn-danger btnDelete" title="Eliminar"><i class="fa-solid fa-user-xmark"></i></button>';
+        btnSendEmailConfirmation = '<button type="button" class="btn btn-info btnSendEmailConfirmation" title="Enviar Correo"><i class="fa-solid fa-envelope"></i></button>';
 
         return `<div class="btn-group btn-group-sm" role="group">
                   ${btnEdit}
                   ${btnResetPass}
+                  ${btnSendEmailConfirmation}
                   ${btnChangeStatus}
                   ${btnDelete}
                 </div>`;
@@ -208,6 +210,10 @@ $(document).ready(function() {
     }
   });
 
+  $("#modalUser").on("hidden.bs.modal", function () {
+    formUser.reset();
+  });
+
   inputEmail.addEventListener('focusout', function () {
     let email = this.value;
     let idUser = inputUserId.value.length ? inputUserId.value : 0;
@@ -248,6 +254,7 @@ $(document).ready(function() {
             if (resp.status) {
               alertify.success(resp.message);
               DTUser.ajax.reload();
+              formUser.reset(); 
               $("#modalUser").modal("hide");
             } else {
               alertify.error(resp.message);
@@ -267,6 +274,7 @@ $(document).ready(function() {
               if (resp.status) {
                 alertify.success(resp.message);
                 DTUser.ajax.reload();
+                formUser.reset(); 
                 $("#modalUser").modal("hide");
               } else {
                 alertify.error(resp.message);

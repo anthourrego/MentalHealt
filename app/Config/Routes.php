@@ -41,12 +41,21 @@ $routes->group('admin', ['filter' => 'profile:admin'], function($routes) {
 });
 
 $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes) {
-  $routes->get('/', [Home::class, 'patient']);
+  $routes->get('/', [Home::class, 'therapist']);
 });
 
 $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {
-  $routes->get('/', [Home::class, 'therapist']);
+  $routes->get('/', [Home::class, 'patient']);
 });
 
 $routes->get('Library/(:segment)/(:any)', [[Libraries::class, 'getLibrary'], "$1/$2"]);
 
+/* $routes->get('Library/(:segment)/(:segment)/(:any)', function($package, $lib, $file) {
+  $path = ROOTPATH . "vendor/{$package}/{$lib}/{$file}";
+  if (file_exists($path)) {
+      $type = pathinfo($path, PATHINFO_EXTENSION) === 'js' ? 'application/javascript' : 'text/css';
+      header("Content-Type: {$type}");
+      readfile($path);
+      exit;
+  }
+}); */

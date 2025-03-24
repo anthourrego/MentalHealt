@@ -156,6 +156,39 @@ const updateStatusUser = (id, userData) => {
   });
 };
 
+/**
+ * Limpia completamente un formulario: campos, validaciones y estados visuales
+ * @param {HTMLFormElement} form - El formulario a limpiar
+ * @param {boolean} resetValidation - Si debe resetear la validación (por defecto true)
+ */
+function cleanForm(form, resetValidation = true) {
+  // Resetear los valores del formulario
+  form.reset();
+  
+  // Limpiar campos ocultos que el reset() podría no limpiar
+  form.querySelectorAll('input[type="hidden"]').forEach(input => {
+    input.value = '';
+  });
+  
+  // Si usamos jQuery Validate, resetear validación
+  if (resetValidation && $(form).data('validator')) {
+    $(form).validate().resetForm();
+  }
+  
+  // Eliminar clases de error y éxito
+  $(form).find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
+  
+  // Resetear campos de select2 si existen
+  $(form).find('select').each(function() {
+    if ($(this).hasClass('select2-hidden-accessible')) {
+      $(this).val(null).trigger('change');
+    }
+  });
+  
+  // Limpiar mensajes de error
+  $(form).find('.error').hide();
+}
+
 $(document).ready(function() {
 
   //Las condiciones del formulario
@@ -210,8 +243,20 @@ $(document).ready(function() {
     }
   });
 
+  // En el evento hidden.bs.modal del modal
   $("#modalUser").on("hidden.bs.modal", function () {
-    formUser.reset();
+    cleanForm(formUser);
+  });
+
+  $("#changePassModal").on("hidden.bs.modal", function () {
+    cleanForm(formPass);
+  });
+
+  $('#modalUser').on('show.bs.modal', function() {
+    // Resetear el formulario si se está abriendo para crear un nuevo usuario
+    if (modalUserLabel.textContent.includes('Crear')) {
+      cleanForm(formUser);
+    }
   });
 
   inputEmail.addEventListener('focusout', function () {
@@ -254,7 +299,7 @@ $(document).ready(function() {
             if (resp.status) {
               alertify.success(resp.message);
               DTUser.ajax.reload();
-              formUser.reset(); 
+              cleanForm(formUser);
               $("#modalUser").modal("hide");
             } else {
               alertify.error(resp.message);
@@ -274,7 +319,7 @@ $(document).ready(function() {
               if (resp.status) {
                 alertify.success(resp.message);
                 DTUser.ajax.reload();
-                formUser.reset(); 
+                cleanForm(formUser);
                 $("#modalUser").modal("hide");
               } else {
                 alertify.error(resp.message);

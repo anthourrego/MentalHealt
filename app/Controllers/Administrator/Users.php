@@ -38,7 +38,7 @@ class Users extends BaseController
 		$postData = (object) $this->request->getPost();
 		$status = $postData->status;
 		
-		$query = $this->db->table('user AS u')
+		$query = $this->db->table('User AS u')
 			->select("
 				u.id, 
 				u.email, 

@@ -64,7 +64,7 @@ class DailyJournal extends Migration
 		]);
 
 		$this->forge->addKey('id', true);
-		$this->forge->addForeignKey('patient_id', 'user', 'id', 'CASCADE', 'CASCADE');
+		$this->forge->addForeignKey('patient_id', 'User', 'id', 'CASCADE', 'CASCADE');
 		$this->forge->createTable('DailyJournal', false, ATRIBUTOSDB);
 	}
 

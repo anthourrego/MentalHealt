@@ -77,8 +77,8 @@ class Appointment extends Migration
 		]);
 
 		$this->forge->addKey('id', true);
-		$this->forge->addForeignKey('patient_id', 'user', 'id', 'CASCADE', 'CASCADE');
-		$this->forge->addForeignKey('therapist_id', 'user', 'id', 'CASCADE', 'CASCADE');
+		$this->forge->addForeignKey('patient_id', 'User', 'id', 'CASCADE', 'CASCADE');
+		$this->forge->addForeignKey('therapist_id', 'User', 'id', 'CASCADE', 'CASCADE');
 		$this->forge->addKey(['therapist_id', 'appointment_date'], false, true);
 		$this->forge->createTable('Appointment', false, ATRIBUTOSDB);
 	}

@@ -9,14 +9,25 @@ class Appointment extends BaseController
 {
 	public function index()
 	{
-		$this->content['title'] = "Mis Citas";
+		$this->content['title'] = "Inicio";
 		$this->content['view'] = "Patient/appointment";
 
+		$this->LMoment();
+		$this->LTempusDominus();
+		$this->LBootstrapSwitch();
+		$this->LJQueryValidation();
 		$this->LFullCalendar();
 
-		$this->content['js_add'][] = [
-			'Patient/Appointment.js'
+		$this->content['css_add'][] = [
+			'Patient/dailyJournal.css'
 		];
+
+		$this->content['js_add'][] = [
+			'Patient/appointment.js',
+			'Patient/dailyJournal.js'
+		];
+		
+		$this->content["dashboard"] = true;
 
 		return view('UI/viewDefault', $this->content);
 	}

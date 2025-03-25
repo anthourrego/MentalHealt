@@ -18,12 +18,13 @@
   <div class="col-4">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title">Mi Diario</h5>
+        <h5 class="card-title">Mis Citas</h5>
       </div>
-      <div class="card-body">
-        
-      </div>
+      <div class="card-body"></div>
     </div>
+  </div>
+  <div class="col-12">
+    <?= view("Patient/DiaryJournal/card.php"); ?>
   </div>
 </div>
 
@@ -121,3 +122,5 @@
     </div>
   </div>
 </div>
+
+<?= view("Patient/DiaryJournal/modals.php"); ?>

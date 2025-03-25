@@ -80,9 +80,9 @@
                 <i class="nav-icon fa-solid fa-house"></i>
                 <p>Inicio</p>
               </a>
-							<a href="<?= base_url("patient/appointments") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'patient' && current_url(true)->getSegment(2) == 'appointments') ? 'active' : '' ?>">
-								<i class="nav-icon fa-solid fa-calendar-check"></i>
-                <p>Citas</p>
+							<a href="<?= base_url("patient/diary") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'patient' && current_url(true)->getSegment(2) == 'diary') ? 'active' : '' ?>">
+								<i class="nav-icon fa-solid fa-book"></i>
+                <p>Mi diario</p>
               </a>
             </li>
 						<?php } ?>

@@ -19,11 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
     diaryLoading.style.display = 'block';
     diaryEmpty.style.display = 'none';
 
+    // Set the limit for diary entries, handling potential undefined values
+    const limit = typeof limitDiary !== 'undefined' ? limitDiary : 0; // Default to 10 entries if limitDiary is not defined
+
     // Realizar la solicitud
     $.ajax({
       url: generalBaseEntry + `getEntries`,
       type: 'GET',
       dataType: 'json',
+      data: {limit},
       success: function(data) {
         // Ocultar indicador de carga
         diaryLoading.style.display = 'none';
@@ -94,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const entryElement = document.createElement('div');
       entryElement.className = 'mb-3 px-2';
       entryElement.innerHTML = `
-        <div class="diary-entry card">
+        <div class="diary-entry card mb-0">
           <div class="card-header ${moodClass} d-flex justify-content-between align-items-center">
             <div>
               <span class="me-2">${moodEmoji}</span>

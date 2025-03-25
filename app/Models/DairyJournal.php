@@ -71,7 +71,8 @@ class DairyJournal extends Model
 	/**
 	 * Obtiene las entradas del diario de un paciente específico con detalles adicionales
 	 */
-	public function getPatientJournals(int $patientId, bool $includePrivate = true)
+	public function getPatientJournals(int $patientId, bool $includePrivate = true, $limit = 0, $offset = 0)
+
 	{
 		$this->where('patient_id', $patientId);
 
@@ -80,6 +81,10 @@ class DairyJournal extends Model
 		}
 		$this->orderBy('entry_date', 'DESC')
 			->orderBy('entry_hour', 'DESC');
+
+		if ($limit > 0) {
+			$this->limit($limit, $offset);
+		}
 
 		$entries = $this->get()->getResult();
 

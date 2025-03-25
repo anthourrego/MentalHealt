@@ -47,13 +47,17 @@ $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes)
 });
 
 $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {
-  $routes->get('/', [Patient::class, 'index']);
+  $routes->get('/', [Appointment::class, 'index']);
 
-  $routes->group('diary', ['filter' => 'ajax'], function($routes) {
-    $routes->post('create', [Patient::class,'saveDiary']);
-    $routes->get('getEntries', [Patient::class,'getEntries']);
-    $routes->delete('delete/(:num)', [[Patient::class, 'deleteEntry'], "$1"]);
-    $routes->put('update/(:num)', [[Patient::class, 'updateEntry'], "$1"]);
+  $routes->group('diary', function($routes) {
+    $routes->get('/', [Patient::class, 'index']);
+
+    $routes->group('', ['filter' => 'ajax'], function($routes) {
+      $routes->post('create', [Patient::class,'saveDiary']);
+      $routes->get('getEntries', [Patient::class,'getEntries']);
+      $routes->delete('delete/(:num)', [[Patient::class, 'deleteEntry'], "$1"]);
+      $routes->put('update/(:num)', [[Patient::class, 'updateEntry'], "$1"]);
+    });
   });
 
   $routes->group('appointments', function($routes) {

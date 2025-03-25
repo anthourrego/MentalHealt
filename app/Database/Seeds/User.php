@@ -14,6 +14,6 @@ class User extends Seeder
 			"last_name" => "Restrepo",
 			"profile" => 1,
 		);
-		$this->db->table('user')->insert($datos);
+		$this->db->table('User')->insert($datos);
 	}
 }

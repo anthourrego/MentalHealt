@@ -45,7 +45,7 @@ class DairyJournal extends Model
 	// Validation
 	protected $validationRules      = [
 		'id'         => "permit_empty|is_natural_no_zero",
-		'patient_id' => 'required|numeric|min_length[1]|is_not_unique[user.id]',
+		'patient_id' => 'required|numeric|min_length[1]|is_not_unique[User.id]',
 		'mood'   		 => 'required|integer|in_list[1,2,3,4,5]',
 		'content'    => 'required|string|min_length[1]|max_length[1000]',
 		'private_entry'  => 'permit_empty|integer|in_list[0,1]',

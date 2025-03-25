@@ -50,8 +50,8 @@ class Appointment extends Model
 	// Validation
 	protected $validationRules      = [
 		'id'         => "permit_empty|is_natural_no_zero",
-		'patient_id' => 'required|numeric|min_length[1]|is_not_unique[user.id]',
-		'therapist_id'	=> 'required|numeric|min_length[1]|is_not_unique[user.id]',
+		'patient_id' => 'required|numeric|min_length[1]|is_not_unique[User.id]',
+		'therapist_id'	=> 'required|numeric|min_length[1]|is_not_unique[User.id]',
 		'status'    => 'required|string|min_length[1]|max_length[2]',
 		'modality'  => 'required|string|min_length[1]|max_length[2]',
 		'appointment_date'  => 'required|valid_date[Y-m-d]',

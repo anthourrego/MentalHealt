@@ -47,7 +47,7 @@ class DairyJournal extends Model
 		'id'         => "permit_empty|is_natural_no_zero",
 		'patient_id' => 'required|numeric|min_length[1]|is_not_unique[user.id]',
 		'mood'   		 => 'required|integer|in_list[1,2,3,4,5]',
-		'content'    => 'required|string|min_length[1]|max_length[500]',
+		'content'    => 'required|string|min_length[1]|max_length[1000]',
 		'private_entry'  => 'permit_empty|integer|in_list[0,1]',
 		'entry_date'  => 'required|valid_date[Y-m-d]',
 		'entry_hour'  => 'required|valid_date[H:i:s]',

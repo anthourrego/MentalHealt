@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const formHourDiary = $('#hourDiary');
   const formDiaryEntryId = document.getElementById('diaryEntryId');
   const diaryEntryModal = $('#diaryEntryModal');
+  const labelEntryModal = document.getElementById("diaryEntryModalLabel");
+  const generalBaseEntry = routeBase + "patient/diary/";
 
   // Función para cargar las entradas del diario
   function loadDiaryEntries() {
@@ -16,10 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     diaryList.innerHTML = '';
     diaryLoading.style.display = 'block';
     diaryEmpty.style.display = 'none';
-    
+
     // Realizar la solicitud
     $.ajax({
-      url: `${routeBase}patient/diary/getEntries`,
+      url: generalBaseEntry + `getEntries`,
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -98,16 +100,80 @@ document.addEventListener('DOMContentLoaded', function() {
               <span class="me-2">${moodEmoji}</span>
               <small>${formattedDate}</small>
             </div>
+            ${entry.private_entry == "1" ? '<div title="Entrada privada" class="ml-auto"><i class="fas fa-lock me-1"></i></div>' : ''}
           </div>
           <div class="card-body">
-            <p class="card-text">${entry.content.length > 500 ? entry.content.substring(0, 500) + '...' : entry.content}</p>
+            <p class="card-text">${entry.content.length > 250 ? entry.content.substring(0, 250) + '...' : entry.content}</p>
           </div>
-          ${entry.private_entry == "1" ? '<div class="card-footer bg-light"><small><i class="fas fa-lock me-1"></i> Entrada privada</small></div>' : ''}
+          <div class="card-footer bg-light text-center">
+            <button class="btn btn-sm btn-outline-secondary me-2 btn-edit-entry" data-id="${entry.id}">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-outline-danger btn-delete-entry" data-id="${entry.id}">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </div>
         </div>
       `;
 
       diaryList.appendChild(entryElement);
+
+      // Configurar los botones de editar y eliminar después de agregar la entrada al DOM
+      const editButtons = entryElement.querySelectorAll('.btn-edit-entry');
+      const deleteButtons = entryElement.querySelectorAll('.btn-delete-entry');
+
+      // Evento para eliminar entrada
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const entryId = this.getAttribute('data-id');
+          deleteEntry(entryId);
+        });
+      });
+
+      editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          editEntry(entry);
+        });
+      });
     });
+  }
+
+  function deleteEntry(entryId) {
+    alertify.confirm('Confirmar eliminación', '¿Estás seguro de que deseas eliminar esta entrada del diario?',
+      function() {
+        $.ajax({
+          url: generalBaseEntry + `delete/${entryId}`,
+          type: 'DELETE',
+          success: function(response) {
+            if (response.status) {
+              alertify.success(response.message || 'Entrada eliminada correctamente');
+              loadDiaryEntries();
+            } else {
+              alertify.error(response.message || 'Error al eliminar la entrada');
+            }
+          }
+        });
+      },
+      function() {
+        // Cancelado por el usuario
+      }
+    ).set('labels', {ok:'Eliminar', cancel:'Cancelar'});
+  }
+
+  function editEntry(entry) {
+    // Rellenar formulario con datos existentes
+    formDiaryEntryId.value = entry.id;
+    document.getElementById(`mood${entry.mood}`).click();
+    document.getElementById('diaryContent').value = entry.content;
+    $("#private_entry").bootstrapSwitch('state', entry.private_entry == "1");
+    labelEntryModal.innerHTML = 'Editar entrada del diario';
+    
+    // Establecer fecha y hora
+    formDateDiary.datetimepicker('date', moment(entry.entry_date));
+    formHourDiary.datetimepicker('date', moment(entry.entry_date + ' ' + entry.entry_hour));
+    
+    // Mostrar modal
+    diaryEntryModal.modal('show');
   }
 
   // Cargar entradas del diario
@@ -116,9 +182,10 @@ document.addEventListener('DOMContentLoaded', function() {
   btnNewDiaryEntry?.addEventListener('click', function() {
     formDiaryEntry.reset();
     formDiaryEntryId.value = '';
-    formDateDiary.datetimepicker('date', moment());
-    formHourDiary.datetimepicker('date', moment());
-    
+    formDateDiary.datetimepicker('date', moment().format('L'));
+    formHourDiary.datetimepicker('date', moment().format('LT'));
+    document.getElementById("mood3").click();
+    labelEntryModal.innerHTML = 'Nueva entrada del diario';
     diaryEntryModal.modal('show');
   });
 
@@ -132,25 +199,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if ($(this).valid()) {
-      // Recopilar datos del formulario
-      const formData = new FormData(this);
       // Determinar si es actualización o creación
-      const url = formDiaryEntryId.value 
-        ? `${routeBase}patient/diary/update/${formDiaryEntryId.value}` 
-        : `${routeBase}patient/diary/create`;
+      const url = generalBaseEntry + (formDiaryEntryId.value ? `update/${formDiaryEntryId.value}` : `create`);
 
       // Mostrar indicador de carga
       const submitBtn = document.querySelector('[form="formDiaryEntry"]');
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...';
+
+      const entryData = $(this).serialize();
   
       $.ajax({
         url: url,
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
+        type: (formDiaryEntryId.value ? 'PUT' : 'POST'),
+        data: entryData,
         success: function(data) {
           if (data.status) {
             alertify.success(data.message || 'Entrada guardada correctamente');

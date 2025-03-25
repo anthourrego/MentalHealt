@@ -48,11 +48,10 @@ class Patient extends BaseController
 		// Preparar datos para guardar
 		$dateDiary = date('Y-m-d', strtotime(str_replace('/', '-', $postData->dateDiary)));
 		$hourDiary = date('H:i:s', strtotime($postData->hourDiary));
-		$postData->mood = (int) $postData->mood;
 
 		$entryData = [
 			'patient_id' => $patientId,
-			'mood' => $postData->mood,
+			'mood' => (int) $postData->mood,
 			'content' => $postData->content,
 			'entry_date' => $dateDiary,
 			'entry_hour' => $hourDiary,
@@ -75,18 +74,78 @@ class Patient extends BaseController
 	}
 
 	/**
-     * Obtener entradas del diario
-     */
-    public function getEntries()
-    {
-			$patientId = session()->get('id');
-			
-			// Obtener entradas del diario con paginación
-			$entries = $this->dairyJournalModel->getPatientJournals($patientId, true);
+	 * Obtener entradas del diario
+	 */
+	public function getEntries()
+	{
+		$patientId = session()->get('id');
+		
+		// Obtener entradas del diario con paginación
+		$entries = $this->dairyJournalModel->getPatientJournals($patientId, true);
 
-			return $this->respond([
+		return $this->respond([
+			'status' => true,
+			'entries' => $entries
+		]);
+	}
+
+	public function deleteEntry($idEntry) {
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo eliminar entrada'
+		];
+
+		$entry = $this->dairyJournalModel->delete($idEntry);
+
+		if ($entry) {
+			$resp = [
 				'status' => true,
-				'entries' => $entries
-			]);
-    }
+				'message' => 'Entrada eliminada correctamente'
+			];
+			return $this->respond($resp, 200);
+		}
+
+		return $this->respond($resp, 400);
+	}
+
+	public function updateEntry() {
+		$dataRequest = (object) $this->request->getRawInput();
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo actualizar la entrada'
+		];
+		
+		// Verificar que tenemos el ID de la entrada
+		if (!isset($dataRequest->diaryEntryId) || empty($dataRequest->diaryEntryId)) {
+			$resp['message'] = 'ID de entrada no válido';
+			return $this->respond($resp, 400);
+		}
+		
+		// Preparar datos para actualizar
+		$dateDiary = date('Y-m-d', strtotime(str_replace('/', '-', $dataRequest->dateDiary)));
+		$hourDiary = date('H:i:s', strtotime($dataRequest->hourDiary));
+
+		$entryData = [
+			'mood' => (int) $dataRequest->mood,
+			'content' => $dataRequest->content,
+			'entry_date' => $dateDiary,
+			'entry_hour' => $hourDiary,
+			'private_entry' => isset($dataRequest->private_entry) ? $dataRequest->private_entry : 0
+		];
+
+		// Actualizar la entrada
+		$updated = $this->dairyJournalModel->update($dataRequest->diaryEntryId, $entryData);
+
+		if ($updated) {
+			$resp = [
+				'status' => true,
+				'message' => 'Entrada actualizada correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->dairyJournalModel->errors());
+		}
+
+		return $this->respond($resp, 400);
+	}
 }

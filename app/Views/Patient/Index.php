@@ -35,7 +35,7 @@
       </div>
       <div class="modal-body">
         <form id="formDiaryEntry" class="formValid" enctype="multipart/form-data">
-          <input type="hidden" id="diaryEntryId" name="id">
+          <input type="hidden" id="diaryEntryId" name="diaryEntryId">
           
           <div class="row mb-4">
             <div class="col-6">
@@ -91,7 +91,7 @@
             <div class="col-md-12">
               <div class="mb-3">
                 <label for="diaryContent" class="form-label">¿Qué te gustaría compartir hoy?</label>
-                <textarea class="form-control" id="diaryContent" name="content" rows="5" required minlength="1" maxlength="500" placeholder="Describe cómo te sientes, qué pensamientos has tenido hoy, situaciones importantes..."></textarea>
+                <textarea class="form-control" id="diaryContent" name="content" rows="5" required minlength="1" maxlength="1000" placeholder="Describe cómo te sientes, qué pensamientos has tenido hoy, situaciones importantes..."></textarea>
               </div>
             </div>
           </div>

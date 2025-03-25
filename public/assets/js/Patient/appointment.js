@@ -15,7 +15,16 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   firstDay: 1, // Lunes como primer día de la semana
   height: 'auto',
   timeZone: 'local',
-  
+  slotLabelFormat:{
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  },//se visualizara de esta manera 01:00 AM en la columna de horas
+  eventTimeFormat: {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  },//y este código se visualizara de la misma manera pero en 
   // Configuración visual
   themeSystem: 'bootstrap4',
   buttonText: {
@@ -34,6 +43,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     endTime: '18:00',
   },
   selectConstraint: 'businessHours',
+  //slotDuration: '01:00:00', // Intervalos de 30 minutos
   
   // Eventos del calendario (citas del paciente)
   events: {
@@ -71,7 +81,6 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   eventContent: function(arg) {
     const timeText = arg.timeText;
     const title = arg.event.title;
-    const status = arg.event.extendedProps.status;
     const modality = arg.event.extendedProps.modality;
     
     let modalityIcon = '';
@@ -85,18 +94,23 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
       case 'phone_call':
         modalityIcon = '<i class="fas fa-phone me-1"></i>';
         break;
+      default:
+        modalityIcon = '<i class="fas fa-book me-1"></i>';
+        break;
     }
     
     return { 
       html: `
         <div class="fc-event-time">${timeText}</div>
-        <div class="fc-event-title">${modalityIcon}${title}</div>
+        <div class="fc-event-title">${modalityIcon} ${title}</div>
       `
     };
   },
   
   // Callbacks de interacción
   dateClick: function(info) {
+    console.log(info);
+    
     // Verificar si el día está dentro del horario laboral
     const clickedDate = info.date;
     const day = clickedDate.getDay();
@@ -114,7 +128,19 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   eventClick: function(info) {
     // Mostrar detalles de la cita al hacer clic
     const event = info.event;
-    showAppointmentDetails(event.id, event.extendedProps);
+    if (event.extendedProps.status == "diary") {
+      const entry = {
+        id: event.extendedProps.primary_id,
+        mood: event.extendedProps.mood,
+        content: event.extendedProps.content,
+        private_entry: event.extendedProps.private_entry,
+        entry_date: event.extendedProps.entry_date,
+        entry_hour: event.extendedProps.entry_hour
+      };
+      editEntry(entry);
+    } else {
+      showAppointmentDetails(event.id, event.extendedProps);
+    }
   },
   
   // Texto para cuando no hay eventos

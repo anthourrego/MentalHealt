@@ -53,7 +53,7 @@ class Appointment extends BaseController
 		$formattedEvents = [];
 		foreach ($events as $event) {
 			$formattedEvents[] = [
-				'id' => $event->id,
+				'id' => "C".$event->id,
 				'title' => $event->title ?? 'Cita',
 				'start' => $event->appointment_date . 'T' . $event->appointment_time,
 				'color' => $event->status == 'confirmed' ? '#28a745' : '#ffc107',
@@ -64,11 +64,17 @@ class Appointment extends BaseController
 		$dialy = $this->dairyJournalModel->where('patient_id', $this->patient_id)->findAll();
 		foreach ($dialy as $event) {
 			$formattedEvents[] = [
-				'id' => $event->id,
+				'id' => "D".$event->id,
 				'title' => 'Diario',
 				'start' => $event->entry_date . 'T' . $event->entry_hour,
 				'color' => '#007bff',
-				'status' => 'diary'
+				'status' => 'diary',
+				'primary_id' => $event->id,
+				'content' => $event->content,
+				'entry_date' => $event->entry_date,
+				'entry_hour' => $event->entry_hour,
+				'mood' => $event->mood,
+				'private_entry' => $event->private_entry,
 			];
 		}
 

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 
 class Appointment extends Model
 {
-	protected $table            = 'appointment';
+	protected $table            = 'Appointment';
 	protected $primaryKey       = 'id';
 	protected $useAutoIncrement = true;
 	protected $returnType       = EntitiesAppointment::class;

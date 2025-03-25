@@ -7,7 +7,7 @@ use App\Entities\User as UserEntities;
 
 class User extends Model
 {
-	protected $table            = 'user';
+	protected $table            = 'User';
 	protected $primaryKey       = 'id';
 	protected $useAutoIncrement = true;
 	protected $returnType       = UserEntities::class;

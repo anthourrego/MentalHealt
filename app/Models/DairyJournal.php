@@ -7,7 +7,7 @@ use App\Entities\DialyJournal as DialyJournalEntities;
 
 class DairyJournal extends Model
 {
-	protected $table            = 'dailyjournal';
+	protected $table            = 'DailyJournal';
 	protected $primaryKey       = 'id';
 	protected $useAutoIncrement = true;
 	protected $returnType       = DialyJournalEntities::class;

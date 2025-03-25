@@ -48,7 +48,7 @@ class Home extends BaseController
 
     public function Administrator() {
         $this->content['title'] = "Inicio";
-        $this->content['view'] = "Administrator/index";
+        $this->content['view'] = "Administrator/Index";
 
         $this->content["countTherapist"] = $this->userModel->countByProfile(2);
         $this->content["countPatient"] = $this->userModel->countByProfile(3);

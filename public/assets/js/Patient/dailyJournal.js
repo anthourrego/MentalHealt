@@ -1,3 +1,5 @@
+const dashboard = true;
+
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos del DOM
   const diaryList = document.getElementById('diary-list');
@@ -39,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Mostrar las entradas
         renderDiaryEntries(data.entries);
+
+        if (dashboard) {
+          calendar.refetchEvents();
+        }
       },
       errror: () => {
         diaryLoading.style.display = 'none';

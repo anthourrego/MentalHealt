@@ -53,11 +53,11 @@ class Appointment extends BaseController
 		$formattedEvents = [];
 		foreach ($events as $event) {
 			$formattedEvents[] = [
-				'id' => $event['id'],
-				'title' => $event['title'] ?? 'Cita',
-				'start' => $event['appointment_date'] . 'T' . $event['appointment_time'],
-				'color' => $event['status'] == 'confirmed' ? '#28a745' : '#ffc107',
-				'status' => $event['status']
+				'id' => $event->id,
+				'title' => $event->title ?? 'Cita',
+				'start' => $event->appointment_date . 'T' . $event->appointment_time,
+				'color' => $event->status == 'confirmed' ? '#28a745' : '#ffc107',
+				'status' => $event->status
 			];
 		}
 

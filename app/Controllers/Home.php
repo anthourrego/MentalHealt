@@ -49,23 +49,18 @@ class Home extends BaseController
     public function Administrator() {
         $this->content['title'] = "Inicio";
         $this->content['view'] = "Administrator/index";
-        /* $this->content['css_add'][] = [
-            'login.css'
-        ]; */
 
-        /* $this->content['js_add'][] = [
-            'usuarios.js'
-        ]; */
+        $this->content["countTherapist"] = $this->userModel->countByProfile(2);
+        $this->content["countPatient"] = $this->userModel->countByProfile(3);
 
         return view('UI/viewDefault', $this->content);
     }
 
-    public function Patient(){
-
-    }
-
     public function Therapist() {
+        $this->content['title'] = "Inicio";
+        $this->content['view'] = "Therapist/index";
 
+        return view('UI/viewDefault', $this->content);
     }
 
 

@@ -13,9 +13,9 @@
 		<!-- /.navbar -->
 
 		<!-- Main Sidebar Container -->
-		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+		<aside class="main-sidebar sidebar-dark-<?= $theme->sidebar ?? "primary" ?> elevation-4">
 			<!-- Brand Logo -->
-			<a href="<?= base_url() ?>" class="brand-link d-flex align-items-center">
+			<a href="<?= base_url() ?>" class="brand-link d-flex align-items-center <?= $theme->bg_logo ?? "" ?>">
 				<img src="<?=base_url("assets/img/icono-blanco.png") ?>" alt="<?=$Project_Name?>" class="brand-image">
 				<span class="brand-text font-weight-light"><?=$Project_Name?></span>
 			</a>
@@ -51,6 +51,7 @@
 								</li>
 							</ul>
 						</li>
+						<?php if ($Profile == 1) { //Administrador ?>
 						<li class="nav-item">
               <a href="<?= base_url("admin") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'admin' && current_url(true)->getSegment(2) == '') ? 'active' : '' ?>">
                 <i class="nav-icon fa-solid fa-house"></i>
@@ -63,35 +64,28 @@
                 <p>Usuarios</p>
               </a>
             </li>
-						<!-- <li class="nav-item <?= (current_url(true)->getSegment((1)) == 'Ubicacion' && (current_url(true)->getSegment((2)) == 'Paises' || current_url(true)->getSegment((2)) == 'Departamentos' || current_url(true)->getSegment((2)) == 'Ciudades')) ? 'menu-is-opening menu-open' : '' ?>">
-              <a href="#" class="nav-link <?= current_url(true)->getSegment((1)) == 'Ubicacion' ? 'active' : '' ?>">
-								<i class="nav-icon fa-solid fa-map"></i>
-                <p>
-									Ubicaón
-									<i class="fas fa-angle-left right"></i>
-								</p>
+
+						
+						<?php } else if ($Profile == 2) { //Terapista ?>
+						<li class="nav-item">
+              <a href="<?= base_url("therapist") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'therapist' && current_url(true)->getSegment(2) == '') ? 'active' : '' ?>">
+                <i class="nav-icon fa-solid fa-house"></i>
+                <p>Inicio</p>
               </a>
-							<ul class="nav nav-treeview">
-								<li	li class="nav-item">
-									<a href="<?= base_url("Ubicacion/Paises") ?>" class="nav-link <?= (current_url(true)->getSegment((1)) == 'Ubicacion' && current_url(true)->getSegment((2)) == 'Paises') ? 'active' : '' ?>">
-										<i class="fa-solid fa-flag nav-icon"></i>
-										<p>Paises</p>
-									</a>
-								</li>
-								<li	li class="nav-item">
-									<a href="<?= base_url("Ubicacion/Departamentos") ?>" class="nav-link <?= (current_url(true)->getSegment((1)) == 'Ubicacion' && current_url(true)->getSegment((2)) == 'Departamentos') ? 'active' : '' ?>">
-									<i class="fa-solid fa-earth-africa nav-icon"></i>
-										<p>Departamentos</p>
-									</a>
-								</li>
-								<li	li class="nav-item">
-									<a href="<?= base_url("Ubicacion/Ciudades") ?>" class="nav-link <?= (current_url(true)->getSegment((1)) == 'Ubicacion' && current_url(true)->getSegment((2)) == 'Ciudades') ? 'active' : '' ?>">
-									<i class="fa-solid fa-city nav-icon"></i>
-										<p>Ciudades</p>
-									</a>
-								</li>
-							</ul>
-            </li> -->
+            </li>
+
+						<?php } else { //Paciente ?>
+							<li class="nav-item">
+              <a href="<?= base_url("patient") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'patient' && current_url(true)->getSegment(2) == '') ? 'active' : '' ?>">
+                <i class="nav-icon fa-solid fa-house"></i>
+                <p>Inicio</p>
+              </a>
+							<a href="<?= base_url("patient/appointments") ?>" class="nav-link <?= (current_url(true)->getSegment(1) == 'patient' && current_url(true)->getSegment(2) == 'appointments') ? 'active' : '' ?>">
+								<i class="nav-icon fa-solid fa-calendar-check"></i>
+                <p>Citas</p>
+              </a>
+            </li>
+						<?php } ?>
 					</ul>
 				</nav>
 				<!-- /.sidebar-menu -->

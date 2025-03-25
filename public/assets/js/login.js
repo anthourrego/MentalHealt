@@ -81,6 +81,13 @@ $(document).ready(function() {
     }
   });
 
+  // Agregar esta configuración al inicio de tu archivo JavaScript
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="X-CSRF-TOKEN"]')?.content || ''
+    }
+  });
+
   window.onerror = function() {
     $("#loading").addClass('d-none');
   };

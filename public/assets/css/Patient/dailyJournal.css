@@ -1,0 +1,34 @@
+.diary-entry {
+  transition: transform 0.2s ease-in-out;
+}
+
+.diary-entry:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+.mood-selector .btn {
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.mood-selector .btn-check:checked + .btn-outline-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mood-selector .btn-check:checked + .btn-outline-warning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.mood-selector .btn-check:checked + .btn-outline-success {
+  background-color: #28a745;
+  color: white;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

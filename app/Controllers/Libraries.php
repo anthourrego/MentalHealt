@@ -62,6 +62,13 @@ class Libraries extends BaseController
 			"ttf" => "fortawesome/font-awesome/webfonts/",
 			"eot" => "fortawesome/font-awesome/webfonts/",
 			"svg" => "fortawesome/font-awesome/webfonts/"
+		],
+		"tempusDominus"=> [
+			"css" => "tempusdominus/bootstrap-4/build/css/",
+			"js" => "tempusdominus/bootstrap-4/build/js/"
+		],
+		"bootstrapSwitch"=> [
+			"js" => "nostalgiaz/bootstrap-switch/dist/js/"
 		]
 	];
 

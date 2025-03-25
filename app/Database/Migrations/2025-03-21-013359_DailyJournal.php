@@ -23,6 +23,13 @@ class DailyJournal extends Migration
 				'unsigned'       => true,
 				'comment'				=> 'Id del paciente que es escribiendo el diario'
 			],
+			'mood' => [
+				'type'        => 'INT',
+				'unsigned'    => true,
+				'constraint'  => 1,
+				'default' 		=> 1,
+				"comment"     => 'Estado de ánimo del paciente (1=Pésimo, 2=Malo, 3=Regular, 4=Bueno, 5=Excelente)'
+			],
 			'content' => [
 				'type'        => 'TEXT',
 				"null"        => false,

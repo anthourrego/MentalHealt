@@ -148,6 +148,22 @@ class User extends Model
 	}
 
 	/**
+	 * Obtener cantidad usuarios por perfil
+	 */
+	public function countByProfile(int $profile = null, int $status = 1)
+	{
+		if (!is_null($profile)) {
+			$this->where('profile', $profile);
+		}
+
+		if (!is_null($status)) {
+			$this->where('status', $status);
+		}
+					
+		return $this->countAllResults();
+	}
+
+	/**
 	 * Activar o desactivar un usuario
 	 */
 	public function toggleStatus(int $userId, int $status = null)

@@ -4,6 +4,8 @@ use CodeIgniter\Router\RouteCollection;
 use App\Controllers\Home;
 use App\Controllers\Libraries;
 use App\Controllers\Administrator\Users;
+use App\Controllers\Appointment;
+use App\Controllers\Patient;
 
 /**
  * @var RouteCollection $routes
@@ -45,7 +47,21 @@ $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes)
 });
 
 $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {
-  $routes->get('/', [Home::class, 'patient']);
+  $routes->get('/', [Patient::class, 'index']);
+
+  $routes->group('diary', ['filter' => 'ajax'], function($routes) {
+    $routes->post('create', [Patient::class,'saveDiary']);
+    $routes->get('getEntries', [Patient::class,'getEntries']);
+  });
+
+  $routes->group('appointments', function($routes) {
+    $routes->get('/', [Appointment::class, 'index']);
+    $routes->get('getEvents', [Appointment::class, 'getEvents']);
+    $routes->get('getAvailableTherapists', [Appointment::class, 'getAvailableTherapists']);
+    $routes->get('getAvailableTimeSlots', [Appointment::class, 'getAvailableTimeSlots']);
+    $routes->post('Create', [Appointment::class, 'createAppointment']);
+    $routes->delete('cancel/(:num)', [[Appointment::class, 'delete'], "$1"]);
+  });
 });
 
 $routes->get('Library/(:segment)/(:any)', [[Libraries::class, 'getLibrary'], "$1/$2"]);

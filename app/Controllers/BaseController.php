@@ -60,7 +60,6 @@ abstract class BaseController extends Controller
         $this->db = Database::connect();
 
         $this->content['Project_Name'] = "Mental Health";
-
         $this->LJQuery();
         $this->LAlertify();
         $this->LFontAwesome();
@@ -69,6 +68,19 @@ abstract class BaseController extends Controller
             $this->LAdminLTE();
             $this->LOverlayScrollbars();
             $this->LGlobal();
+            $this->content['Profile'] = session()->get("profile");
+            $theme = (object) [
+                "sidebar" => "primary",
+                "bg_logo" => "",
+            ];
+            if ($this->content['Profile'] == 2) {
+                $theme->sidebar = "lightblue";
+                $theme->bg_logo = "bg-lightblue";
+            } else if ($this->content['Profile'] == 3) {
+                $theme->sidebar = "teal";
+                $theme->bg_logo = "bg-teal";
+            }
+            $this->content['theme'] = $theme;
         } else {
             $this->LBootstrap();
         }
@@ -129,6 +141,13 @@ abstract class BaseController extends Controller
 
         $this->content['js_lib'][] = [
             'fancybox/jquery.fancybox.min.js'
+        ];
+    }
+
+    public function LFullCalendar()
+    {
+        $this->content['js_lib'][] = [
+            'fullCalendar/dist/index.global.min.js'
         ];
     }
 
@@ -199,6 +218,22 @@ abstract class BaseController extends Controller
         $this->content['js'][] = [
             'moment/moment.js',
             'moment-locale/es-mx.js'
+        ];
+    }
+
+    public function LTempusDominus(){
+        $this->content['css'][] = [
+            'tempusDominus/tempusdominus-bootstrap-4.min.css'
+        ];
+
+        $this->content['js'][] = [
+            'tempusDominus/tempusdominus-bootstrap-4.min.js'
+        ];
+    }
+
+    public function LBootstrapSwitch(){
+        $this->content['js'][] = [
+            'bootstrapSwitch/bootstrap-switch.min.js'
         ];
     }
 

@@ -25,7 +25,9 @@
         "fortawesome/font-awesome": "^6.7",
         "hermawan/codeigniter4-datatables": "^0.8.0",
         "moment/moment": "^2.30",
+        "nostalgiaz/bootstrap-switch": "^3.3",
         "stuk/jszip": "^3.0",
+        "tempusdominus/bootstrap-4": "^5.1",
         "twbs/bootstrap": "4.6.2"
     },
     "require-dev": {
@@ -53,7 +55,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
-            "oomphinc/composer-installers-extender": true
+            "oomphinc/composer-installers-extender": true,
+            "robloach/component-installer": false
         }
     },
     "scripts": {

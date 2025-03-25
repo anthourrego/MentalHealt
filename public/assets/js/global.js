@@ -40,6 +40,13 @@ $(document).on({
   }
 });
 
+// Agregar esta configuración al inicio de tu archivo JavaScript
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': document.querySelector('meta[name="X-CSRF-TOKEN"]')?.content || ''
+  }
+});
+
 window.onerror = function() {
   $("#loading, #loadingHttp").addClass('d-none');
 };

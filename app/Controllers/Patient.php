@@ -19,7 +19,7 @@ class Patient extends BaseController
 	public function index()
 	{
 		$this->content['title'] = "Mi Diario";
-		$this->content['view'] = "Patient/index";
+		$this->content['view'] = "Patient/Index";
 
 		$this->LMoment();
 		$this->LTempusDominus();

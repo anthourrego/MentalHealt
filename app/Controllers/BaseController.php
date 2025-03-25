@@ -218,7 +218,7 @@ abstract class BaseController extends Controller
         ];
 
         $this->content['js_add'][] = [
-            'dataTables.js'
+            'DataTables.js'
         ];
     }
 

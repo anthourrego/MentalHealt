@@ -1,5 +1,5 @@
 const limitDiary = 6;
-
+const generalBaseAppointment = routeBase + "patient/appointments/";
 document.addEventListener('DOMContentLoaded', function() {
   const calendarEl = document.getElementById('calendar');
   
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     locale: 'es', // Español
     firstDay: 1, // Lunes como primer día de la semana
@@ -23,8 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
       today: 'Hoy',
       month: 'Mes',
       week: 'Semana',
-      day: 'Día',
-      list: 'Lista'
+      day: 'Día'
     },
     
     // Funcionalidad de citas
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Eventos del calendario (citas del paciente)
     events: {
-      url: routeBase + 'patient/appointments/getEvents',
+      url: generalBaseAppointment + 'getEvents',
       method: 'GET',
       failure: function() {
         alertify.error('Error al cargar las citas. Por favor, recarga la página.');

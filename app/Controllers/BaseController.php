@@ -151,7 +151,11 @@ abstract class BaseController extends Controller
     public function LFullCalendar()
     {
         $this->content['js_lib'][] = [
-            'fullCalendar/packages/bootstrap4/index.global.min.js'
+            'fullCalendar/packages/core/index.global.min.js',
+            'fullCalendar/packages/interaction/index.global.min.js',
+            'fullCalendar/packages/daygrid/index.global.min.js',
+            'fullCalendar/packages/timegrid/index.global.min.js',
+            'fullCalendar/packages/list/index.global.min.js'
         ];
     }
 

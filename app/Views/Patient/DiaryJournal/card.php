@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
       <?php if (isset($dashboard) && $dashboard === true) { ?>
-      <h5 class="card-title">Mi Diario</h5>
+      <h5 class="card-title"><i class="fa-solid fa-book"></i> Mi Diario</h5>
       <?php } ?>
       <button class="btn btn-primary ml-auto" id="btnNewDiaryEntry">
         <i class="fas fa-plus"></i> Nueva entrada

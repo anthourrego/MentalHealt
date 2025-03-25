@@ -3,12 +3,12 @@
   <div class="col-8">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title">Mi Calendario</h5>
+        <h5 class="card-title"><i class="fa-solid fa-calendar"></i> Mi Calendario</h5>
       </div>
       <div class="card-body">
         <div id="calendar-loading" class="text-center" style="display: none;">
           <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
+            <span class="visually-hidden"></span>
           </div>
         </div>
         <div id="calendar"></div>
@@ -18,14 +18,12 @@
   <div class="col-4">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title">Mis Citas</h5>
+        <h5 class="card-title"><i class="fa-solid fa-list"></i> Mis Citas</h5>
       </div>
       <div class="card-body"></div>
     </div>
   </div>
-  <div class="col-12">
-    <?= view("Patient/DiaryJournal/card.php"); ?>
-  </div>
+  <?= view("Patient/DiaryJournal/card.php"); ?>
 </div>
 
 <!-- Modal para Crear Cita -->

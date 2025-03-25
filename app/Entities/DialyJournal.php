@@ -39,8 +39,6 @@ class DialyJournal extends Entity
 		'patient_id' => 'integer',
 		'mood' => 'integer',
 		'content' => 'string',
-		'entry_date' => 'date',
-		'entry_hour' => 'time',
 		'private_entry' => 'integer',
 		'created_at' => 'datetime',
 		'updated_at' => 'datetime',

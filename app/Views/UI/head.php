@@ -50,9 +50,9 @@
     <div id="loadingHttp" class="d-none"></div>
     <div id="loading" class="d-none">
       <div class="box-loading">
-        <div class="loader">
+        <div class="loader <?= $theme->border_loader ?? "" ?>">
           <div class="loader-1">
-            <div class="loader-2"></div>
+            <div class="loader-2 <?= $theme->border_loader ?? "" ?>"></div>
           </div>
         </div>
       </div>

@@ -78,4 +78,17 @@
   100% {transform: rotate(360deg);}
 }
 
+.border-teal {
+  border-top: 8px solid #20c997 !important;
+  border-bottom: 8px solid #20c997 !important;
+}
+
+.border-lightblue {
+  border-top: 8px solid rgb(60, 141, 188) !important;;
+  border-bottom: 8px solid rgb(60, 141, 188) !important;;
+}
+
+
+
+
 /* ================= Fin efecto cargando =========================== */

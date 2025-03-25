@@ -72,13 +72,17 @@ abstract class BaseController extends Controller
             $theme = (object) [
                 "sidebar" => "primary",
                 "bg_logo" => "",
+                "border_loader" => "",
             ];
             if ($this->content['Profile'] == 2) {
                 $theme->sidebar = "lightblue";
                 $theme->bg_logo = "bg-lightblue";
+                $theme->border_loader = "border-lightblue";
             } else if ($this->content['Profile'] == 3) {
                 $theme->sidebar = "teal";
                 $theme->bg_logo = "bg-teal";
+                $theme->border_loader = "border-teal";
+
             }
             $this->content['theme'] = $theme;
         } else {

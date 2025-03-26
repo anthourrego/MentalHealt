@@ -245,6 +245,18 @@ abstract class BaseController extends Controller
         ];
     }
 
+    public function LSelect2(){
+        $this->content['css'][] = [
+            'select2/select2.min.css',
+            'select2BS4/select2-bootstrap4.min.css'
+        ];
+
+        $this->content['js'][] = [
+            'select2/select2.full.min.js',
+            'select2i18n/es.js'
+        ];
+    }
+
     public function LGlobal()
     {
         $this->content['css_add'][] = [

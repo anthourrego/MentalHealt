@@ -69,6 +69,16 @@ class Libraries extends BaseController
 		],
 		"bootstrapSwitch"=> [
 			"js" => "nostalgiaz/bootstrap-switch/dist/js/"
+		],
+		"select2"=> [
+			"css" => "select2/select2/dist/css/",
+			"js" => "select2/select2/dist/js/"
+		],
+		"select2i18n"=> [
+			"js" => "select2/select2/dist/js/i18n/"
+		],
+		"select2BS4"=> [
+			"css" => "ttskch/select2-bootstrap4-theme/dist/"
 		]
 	];
 

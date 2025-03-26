@@ -26,8 +26,10 @@
         "hermawan/codeigniter4-datatables": "^0.8.0",
         "moment/moment": "^2.30",
         "nostalgiaz/bootstrap-switch": "^3.3",
+        "select2/select2": "^4.0",
         "stuk/jszip": "^3.0",
         "tempusdominus/bootstrap-4": "^5.1",
+        "ttskch/select2-bootstrap4-theme": "^1.5",
         "twbs/bootstrap": "4.6.2"
     },
     "require-dev": {

@@ -31,6 +31,7 @@ class Appointment extends BaseController
 		$this->LBootstrapSwitch();
 		$this->LJQueryValidation();
 		$this->LFullCalendar();
+		$this->LSelect2();
 
 		$this->content['css_add'][] = [
 			'Patient/dailyJournal.css'

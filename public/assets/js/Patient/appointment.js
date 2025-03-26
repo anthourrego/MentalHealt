@@ -109,8 +109,6 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   
   // Callbacks de interacción
   dateClick: function(info) {
-    console.log(info);
-    
     // Verificar si el día está dentro del horario laboral
     const clickedDate = info.date;
     const day = clickedDate.getDay();
@@ -118,6 +116,14 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     // Si es fin de semana (0=domingo, 6=sábado), no permitir
     if (day === 0 || day === 6) {
       alertify.warning('No se pueden agendar citas en fines de semana');
+      return;
+    }
+
+    // Verificar que la fecha seleccionada no sea anterior a hoy
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Resetear la hora para comparar solo fechas
+    if (clickedDate < today) {
+      alertify.warning('No se pueden agendar citas en fechas pasadas');
       return;
     }
     

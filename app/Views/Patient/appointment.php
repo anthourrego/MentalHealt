@@ -40,42 +40,37 @@
         <div class="modal-body">
           <input type="hidden" id="appointmentDate" name="date">
           
-          <div class="mb-3">
+          <div class="mb-3 form-group">
             <label for="therapistSelect" class="form-label">Terapeuta</label>
-            <select class="form-select" id="therapistSelect" name="therapist_id" required>
+            <select class="custom-select" id="therapistSelect" name="therapist_id" required>
               <option value="">Seleccione un terapeuta...</option>
             </select>
           </div>
           
-          <div class="mb-3">
+          <div class="mb-3 form-group">
             <label for="timeSelect" class="form-label">Horario</label>
-            <select class="form-select" id="timeSelect" name="start_time" required disabled>
+            <select class="custom-select" id="timeSelect" name="start_time" required disabled>
               <option value="">Seleccione un horario...</option>
             </select>
           </div>
           
-          <div class="mb-3">
+          <div class="mb-3 form-group">
             <label for="modalitySelect" class="form-label">Modalidad</label>
-            <select class="form-select" id="modalitySelect" name="modality" required>
-              <option value="in_person">Presencial</option>
-              <option value="video_call">Videollamada</option>
-              <option value="phone_call">Llamada telefónica</option>
+            <select class="custom-select" id="modalitySelect" name="modality" required>
+              <option value="IP">Presencial</option>
+              <option value="VC">Videollamada</option>
+              <option value="PC">Llamada telefónica</option>
             </select>
           </div>
           
-          <div class="mb-3">
+          <div class="mb-3 form-group">
             <label for="reasonText" class="form-label">Motivo de la consulta</label>
             <textarea class="form-control" id="reasonText" name="reason" rows="3" required></textarea>
           </div>
-          
-          <div class="mb-3">
-            <label for="notesText" class="form-label">Notas adicionales</label>
-            <textarea class="form-control" id="notesText" name="notes" rows="2"></textarea>
-          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-primary">Agendar Cita</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class=""></i> Cerrar</button>
         </div>
       </form>
     </div>

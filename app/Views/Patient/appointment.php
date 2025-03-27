@@ -36,7 +36,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="formCreateAppointment">
+      <form id="formCreateAppointment" class="formValid">
         <div class="modal-body">
           <input type="hidden" id="appointmentDate" name="date">
           
@@ -69,8 +69,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Agendar Cita</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class=""></i> Cerrar</button>
+          <button type="submit" class="btn btn-success"><i class="fa-solid fa-calendar-plus"></i> Agendar Cita</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
         </div>
       </form>
     </div>

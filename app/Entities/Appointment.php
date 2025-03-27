@@ -25,12 +25,6 @@ class Appointment extends Entity
 	protected $casts   = [
 		'patient_id' => 'integer',
 		'therapist_id' => 'integer',
-		'status' => 'string',
-		'modality' => 'string',
-		'appointment_date' => 'date',
-		'appointment_time' => 'time',
-		'video_url' => 'string',
-		'notes' => 'string',
 		'created_at' => 'datetime',
 		'updated_at' => 'datetime',
 	];

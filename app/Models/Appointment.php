@@ -31,10 +31,6 @@ class Appointment extends Model
 		'id' => 'integer',
 		'patient_id' => 'integer',
 		'therapist_id' => 'integer',
-		'status' => 'string',
-		'modality' => 'string',
-		'video_url' => 'string',
-		'notes' => 'string',
 		'created_at' => 'datetime',
 		'updated_at' => 'datetime',
 	];

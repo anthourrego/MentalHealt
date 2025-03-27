@@ -39,11 +39,11 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
   selectable: true, // Permite seleccionar días/horarios
   businessHours: {
     daysOfWeek: [1, 2, 3, 4, 5], // Lunes a viernes
-    startTime: '09:00',
+    startTime: '08:00',
     endTime: '18:00',
   },
   selectConstraint: 'businessHours',
-  //slotDuration: '01:00:00', // Intervalos de 30 minutos
+  slotDuration: '01:00:00', // Intervalos de 30 minutos
   
   // Eventos del calendario (citas del paciente)
   events: {
@@ -100,10 +100,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     }
     
     return { 
-      html: `
-        <div class="fc-event-time">${timeText}</div>
-        <div class="fc-event-title">${modalityIcon} ${title}</div>
-      `
+      html: `<div class="fc-event-time">${timeText} ${modalityIcon} ${title}</div>`
     };
   },
   
@@ -125,6 +122,24 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     if (clickedDate < today) {
       alertify.warning('No se pueden agendar citas en fechas pasadas');
       return;
+    }
+
+    // Verificar si hay demasiados eventos en la fecha seleccionada
+    const eventsOnDay = calendar.getEvents().filter(event => {
+      const eventDate = new Date(event.start);
+      return eventDate.toDateString() === clickedDate.toDateString();
+    });
+
+    // Verificar cuántas citas tiene ya en ese día (opcional)
+    const appointmentsCount = eventsOnDay.filter(event => event.extendedProps.status !== "diary").length;
+    if (appointmentsCount >= 1) {
+      alertify.warning('Ya tienes el máximo de citas permitidas para este día');
+      return;
+    }
+
+    // Si deseas mostrar cuántas citas tiene
+    if (appointmentsCount > 0) {
+      alertify.message(`Ya tienes ${appointmentsCount} cita(s) programada(s) para este día`);
     }
     
     // Mostrar modal para seleccionar terapeuta y horario
@@ -165,7 +180,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
 });
 
 // Función para mostrar detalles de una cita
-function showAppointmentDetails(appointmentId, details) {
+/* function showAppointmentDetails(appointmentId, details) {
   // Actualizar elementos del modal con los detalles
   document.getElementById('appointmentTherapist').textContent = details.therapistName;
   document.getElementById('appointmentDateTime').textContent = details.formattedDateTime;
@@ -195,7 +210,7 @@ function showAppointmentDetails(appointmentId, details) {
   // Mostrar el modal
   const detailModal = new bootstrap.Modal(document.getElementById('appointmentDetailModal'));
   detailModal.show();
-}
+} */
 
 // Función para abrir modal de nueva cita
 function openAppointmentModal(dateStr) {
@@ -221,15 +236,21 @@ function loadTherapists() {
   // Mostrar indicador de carga
   selectTherapist.disabled = true;
   
-  fetch(routeBase + 'patient/appointments/getAvailableTherapists?date=' + date)
-    .then(response => response.json())
-    .then(data => {
+  $.ajax({
+    url: routeBase + 'patient/appointments/getAvailableTherapists',
+    type: 'GET',
+    data: { date: date },
+    dataType: 'json',
+    beforeSend: function() {
+      selectTherapist.disabled = true;
+    },
+    success: function(data) {
       if (data.status && data.therapists.length > 0) {
         // Añadir opciones de terapeutas
         data.therapists.forEach(therapist => {
           const option = document.createElement('option');
           option.value = therapist.id;
-          option.textContent = `${therapist.first_name} ${therapist.last_name}`;
+          option.textContent = therapist.full_name;
           selectTherapist.appendChild(option);
         });
       } else {
@@ -239,18 +260,19 @@ function loadTherapists() {
         option.textContent = 'No hay terapeutas disponibles en esta fecha';
         selectTherapist.appendChild(option);
       }
-    })
-    .catch(error => {
+    },
+    error: function(xhr, status, error) {
       console.error('Error al cargar terapeutas:', error);
       alertify.error('Error al cargar terapeutas disponibles');
-    })
-    .finally(() => {
+    },
+    complete: function() {
       selectTherapist.disabled = false;
-    });
+    }
+  });
 }
 
 // Función para confirmar cancelación
-function confirmCancelAppointment(appointmentId) {
+/* function confirmCancelAppointment(appointmentId) {
   alertify.confirm(
     'Cancelar Cita',
     '¿Estás seguro de que deseas cancelar esta cita?',
@@ -263,10 +285,10 @@ function confirmCancelAppointment(appointmentId) {
       alertify.message('Operación cancelada');
     }
   ).set('labels', {ok:'Sí, cancelar', cancel:'No'});
-}
+} */
 
 // Función para cancelar cita
-function cancelAppointment(appointmentId) {
+/* function cancelAppointment(appointmentId) {
   fetch(routeBase + 'patient/appointments/cancel/' + appointmentId, {
     method: 'POST',
     headers: {
@@ -291,26 +313,26 @@ function cancelAppointment(appointmentId) {
     console.error('Error:', error);
     alertify.error('Error al procesar la solicitud');
   });
-}
+} */
 
 // Funciones auxiliares para texto de estado y modalidad
 function getStatusText(status) {
   const statusMap = {
-    'pending': 'Pendiente de confirmación',
-    'confirmed': 'Confirmada',
-    'cancelled_patient': 'Cancelada por el paciente',
-    'cancelled_therapist': 'Cancelada por el terapeuta',
-    'completed': 'Completada',
-    'no_show': 'No asistió'
+    'PE': 'Pendiente de confirmación',
+    'CO': 'Confirmada',
+    'CP': 'Cancelada por el paciente',
+    'CT': 'Cancelada por el terapeuta',
+    'CC': 'Completada',
+    'NO': 'No asistió'
   };
   return statusMap[status] || status;
 }
 
 function getModalityText(modality) {
   const modalityMap = {
-    'in_person': 'Presencial',
-    'video_call': 'Videollamada',
-    'phone_call': 'Llamada telefónica'
+    'IP': 'Presencial',
+    'VC': 'Videollamada',
+    'PC': 'Llamada telefónica'
   };
   return modalityMap[modality] || modality;
 }
@@ -322,29 +344,33 @@ document.addEventListener('DOMContentLoaded', function() {
   // Manejo del formulario de creación de cita
   document.getElementById('formCreateAppointment')?.addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    // Recoger datos del formulario
-    const formData = new FormData(this);
-    
-    // Enviar solicitud
-    fetch(routeBase + 'patient/appointments/create', {
+
+    if ($(this).valid()) {
+      // Recoger datos del formulario
+      const formData = new FormData(this);
+      
+      // Enviar solicitud
+      fetch(routeBase + 'patient/appointments/create', {
       method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status) {
-        alertify.success(data.message || 'Cita agendada correctamente');
-        calendar.refetchEvents();
-        bootstrap.Modal.getInstance(document.getElementById('appointmentModal')).hide();
-      } else {
-        alertify.error(data.message || 'Error al agendar la cita');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alertify.error('Error al procesar la solicitud');
-    });
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status) {
+          alertify.success(data.message || 'Cita agendada correctamente');
+          calendar.refetchEvents();
+          bootstrap.Modal.getInstance(document.getElementById('appointmentModal')).hide();
+        } else {
+          alertify.error(data.message || 'Error al agendar la cita');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alertify.error('Error al procesar la solicitud');
+      });
+
+    }
+    
   });
   
   // Actualizar horarios disponibles cuando se selecciona un terapeuta
@@ -363,18 +389,26 @@ document.addEventListener('DOMContentLoaded', function() {
     timeSelect.disabled = true;
     timeSelect.innerHTML = '<option value="">Cargando horarios...</option>';
     
-    fetch(`${routeBase}patient/appointments/getAvailableTimeSlots?therapist_id=${therapistId}&date=${date}`)
-      .then(response => response.json())
-      .then(data => {
+    $.ajax({
+      url: routeBase + 'patient/appointments/getAvailableTimeSlots',
+      type: 'GET',
+      data: { 
+        therapist_id: therapistId, 
+        date: date 
+      },
+      dataType: 'json',
+      success: function(data) {
         // Resetear select
         timeSelect.innerHTML = '<option value="">Seleccione un horario...</option>';
         
         if (data.status && data.timeSlots.length > 0) {
           data.timeSlots.forEach(slot => {
-            const option = document.createElement('option');
-            option.value = slot.start;
-            option.textContent = `${slot.start} - ${slot.end}`;
-            timeSelect.appendChild(option);
+            if (slot.available) {
+              const option = document.createElement('option');
+              option.value = slot.start;
+              option.textContent = `${slot.start} - ${slot.end}`;
+              timeSelect.appendChild(option);
+            }
           });
         } else {
           const option = document.createElement('option');
@@ -382,13 +416,14 @@ document.addEventListener('DOMContentLoaded', function() {
           option.textContent = 'No hay horarios disponibles';
           timeSelect.appendChild(option);
         }
-      })
-      .catch(error => {
+      },
+      error: function(xhr, status, error) {
         console.error('Error:', error);
         alertify.error('Error al cargar horarios disponibles');
-      })
-      .finally(() => {
+      },
+      complete: function() {
         timeSelect.disabled = false;
-      });
+      }
+    });
   });
 });

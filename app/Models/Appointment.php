@@ -21,7 +21,8 @@ class Appointment extends Model
 		'appointment_date',
 		'appointment_time',
 		'video_url',
-		'notes'
+		'notes',
+		'notes_therapist'
 	];
 
 	protected bool $allowEmptyInserts = false;
@@ -54,6 +55,7 @@ class Appointment extends Model
 		'appointment_time'  => 'required|valid_date[H:i:s]',
 		'video_url' => 'permit_empty|string|max_length[255]',
 		'notes' => 'required|string|min_length[1]|max_length[1000]',
+		'notes_therapist' => 'permit_empty|string|min_length[1]|max_length[1000]',
 	];
 	protected $validationMessages   = [];
 	protected $skipValidation       = false;

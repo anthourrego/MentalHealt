@@ -285,4 +285,26 @@ class Appointment extends BaseController
 
 		return $this->respond($resp, 400);
 	}
+
+	public function updateAppointment($idAppointment) {
+		$dataRequest = (object) $this->request->getRawInput();
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo actualizar la cita'
+		];
+
+		$appointment = $this->appointmentModel->update($idAppointment, $dataRequest);
+
+		if ($appointment && empty($this->appointmentModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Cita actualizada correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->appointmentModel->errors());
+		}
+
+		return $this->respond($resp, 400);
+	}
 }

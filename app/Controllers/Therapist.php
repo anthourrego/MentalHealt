@@ -54,6 +54,7 @@ class Therapist extends BaseController
 				Appointment.appointment_time,
 				Appointment.video_url,
 				Appointment.notes,
+				Appointment.notes_therapist,
 				CONCAT(U.first_name, ' ', U.last_name) AS patientName,
 			")->join("user U", "Appointment.patient_id = U.id")
 			->where('Appointment.therapist_id', $this->therapist_id);
@@ -82,6 +83,7 @@ class Therapist extends BaseController
 				'modality' => $event->modality,
 				'primary_id' => $event->id,
 				'addNotes' => $event->notes,
+				'notes_therapist' => $event->notes_therapist,
 				'patientName' => $event->patientName,
 				'video_url' => $event->video_url,
 				'currentDate' => (date("Y-m-d") == $event->appointment_date) ? true : false,

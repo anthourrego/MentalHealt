@@ -50,6 +50,7 @@ $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes)
     $routes->get('getEvents', [Therapist::class, 'getEvents']);
     $routes->put('cancel/(:num)', [[Appointment::class, 'changeStatus'], "$1"]);
     $routes->put('noPresented/(:num)', [[Appointment::class, 'changeStatus'], "$1"]);
+    $routes->put('Update/(:num)', [[Appointment::class, 'updateAppointment'], "$1"]);
     $routes->get('getAppointments', [Therapist::class, 'getEvents']);
     /* $routes->get('/', [Appointment::class, 'index']);
     $routes->get('getAvailableTherapists', [Appointment::class, 'getAvailableTherapists']);

@@ -156,7 +156,15 @@ function showAppointmentDetails(appointmentId, details) {
   document.getElementById('appointmentModality').textContent = getModalityText(details.modality);
   document.getElementById('appointmentStatus').textContent = getStatusText(details.status);
   document.getElementById('appointmentNotes').textContent = details.addNotes || 'Sin notas';
-  
+  document.getElementById('appointmentNotesAdd').textContent = details.notes_therapist || 'Sin notas';
+
+  document.getElementById('appointmentIdCompleted').value = appointmentId;
+  document.getElementById('appointmentIdConfirm').value = appointmentId;
+
+  document.querySelectorAll(".appointmentNotesAdd").forEach(element => {
+    element.classList.add('d-none');
+  });
+
   // Configurar botones según el estado
   const btnCancel = document.getElementById('btnCancelAppointment');
 	const btnJoinCall = document.getElementById('btnJoinVideoCall');
@@ -196,24 +204,16 @@ function showAppointmentDetails(appointmentId, details) {
 		btnNoPresented.onclick = () => confirmNoPresentedAppointment(appointmentId);
 	}
 
-	/* if (details.status === 'CO' && details.modality === 'VC') {
-		btnCompleted.classList.remove('d-none');
-		btnCompleted.onclick = () => {
-			alertify.confirm(
-				'Completar Cita',
-				'¿Estás seguro de que deseas marcar esta cita como completada?',
-				function() {
-					// Si el usuario confirma
-					cancelAppointment(appointmentId);
-				},
-				function() {
-					// Si el usuario cancela
-					alertify.message('Operación cancelada');
-				}
-			).set('labels', {ok:'Sí, completar', cancel:'No'});
-		};
-
-	} */
+  if (details.status === 'CC') {
+    document.querySelectorAll(".appointmentNotesAdd").forEach(element => {
+      element.classList.remove('d-none');
+    });
+    btnJoinCall.classList.add('d-none');
+    btnCompleted.classList.add('d-none');
+    btnConfirmed.classList.add('d-none');
+    btnNoPresented.classList.add('d-none');
+    btnCancel.classList.add('d-none');
+  }
   
   // Mostrar el modal
   appointmentDetailModal.show();
@@ -226,7 +226,29 @@ function confirmCancelAppointment(appointmentId) {
     '¿Estás seguro de que deseas cancelar esta cita?',
     function() {
       // Si el usuario confirma
-      cancelAppointment(appointmentId);
+      $.ajax({
+        url: generalBaseAppointment + 'cancel/' + appointmentId,
+        type: 'PUT',
+        dataType: 'json',
+        data: {
+          status: 'CT'
+          //csrf_token: document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        success: function(data) {
+          if (data.status) {
+            alertify.success(data.message || 'Cita cancelada correctamente');
+            calendar.refetchEvents();
+            getAppointments();
+            appointmentDetailModal.hide();
+          } else {
+            alertify.error(data.message || 'Error al cancelar la cita');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error:', error);
+          alertify.error('Error al procesar la solicitud');
+        }
+      });
     },
     function() {
       // Si el usuario cancela
@@ -235,70 +257,40 @@ function confirmCancelAppointment(appointmentId) {
   ).set('labels', {ok:'Sí, cancelar', cancel:'No'});
 }
 
-// Función para cancelar cita
-function cancelAppointment(appointmentId) {
-  $.ajax({
-    url: generalBaseAppointment + 'cancel/' + appointmentId,
-    type: 'PUT',
-    dataType: 'json',
-    data: {
-      status: 'CT'
-      //csrf_token: document.querySelector('meta[name="csrf-token"]')?.content || ''
-    },
-    success: function(data) {
-      if (data.status) {
-        alertify.success(data.message || 'Cita cancelada correctamente');
-        calendar.refetchEvents();
-        appointmentDetailModal.hide();
-      } else {
-        alertify.error(data.message || 'Error al cancelar la cita');
-      }
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-      alertify.error('Error al procesar la solicitud');
-    }
-  });
-}
-
 function confirmNoPresentedAppointment(appointmentId) {
   alertify.confirm(
     'Actualizar cita',
     '¿Estás seguro de que deseas actualizar esta cita?',
     function() {
-      // Si el usuario confirma
-      noPresentedAppointment(appointmentId);
+      $.ajax({
+        url: generalBaseAppointment + 'noPresented/' + appointmentId,
+        type: 'PUT',
+        dataType: 'json',
+        data: {
+          status: 'NS'
+          //csrf_token: document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        success: function(data) {
+          if (data.status) {
+            alertify.success(data.message || 'Cita actualizada correctamente');
+            calendar.refetchEvents();
+            getAppointments();
+            appointmentDetailModal.hide();
+          } else {
+            alertify.error(data.message || 'Error al cancelar la cita');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('Error:', error);
+          alertify.error('Error al procesar la solicitud');
+        }
+      });
     },
     function() {
       // Si el usuario cancela
       alertify.message('Operación cancelada');
     }
   ).set('labels', {ok:'Si', cancel:'No'});
-}
-
-function noPresentedAppointment(appointmentId) {
-  $.ajax({
-    url: generalBaseAppointment + 'noPresented/' + appointmentId,
-    type: 'PUT',
-    dataType: 'json',
-    data: {
-      status: 'NS'
-      //csrf_token: document.querySelector('meta[name="csrf-token"]')?.content || ''
-    },
-    success: function(data) {
-      if (data.status) {
-        alertify.success(data.message || 'Cita actualizada correctamente');
-        calendar.refetchEvents();
-        appointmentDetailModal.hide();
-      } else {
-        alertify.error(data.message || 'Error al cancelar la cita');
-      }
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-      alertify.error('Error al procesar la solicitud');
-    }
-  });
 }
 
 function getAppointments() {
@@ -372,7 +364,58 @@ function getAppointments() {
   });
 }
 
+function updateAppointments(appointmentId, dataJson) {
+  $.ajax({
+    url: generalBaseAppointment + 'Update/' + appointmentId,
+    type: 'PUT',
+    dataType: 'json',
+    data: dataJson,
+    success: function(data) {
+      if (data.status) {
+        alertify.success(data.message || 'Cita confirmada correctamente');
+        calendar.refetchEvents();
+        getAppointments();
+        appointmentDetailModal.hide();
+      } else {
+        alertify.error(data.message || 'Error al modificar la cita');
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Error:', error);
+      alertify.error('Error al procesar la solicitud');
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   calendar.render();
   getAppointments();
+
+  document.getElementById('formConfirmed')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if ($(this).valid()) {
+      // Recoger datos del formulario
+      const formData = new FormData(this);
+
+      updateAppointments(formData.get('appointmentId'), {
+        status: 'CO',
+        video_url: formData.get('urlVideo')
+      });
+    }
+  });
+
+  document.getElementById('formCompleted')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if ($(this).valid()) {
+      // Recoger datos del formulario
+      const formData = new FormData(this);
+
+      updateAppointments(formData.get('appointmentId'), {
+        status: 'CC',
+        notes_therapist: formData.get('appointmentAnotation')
+      });
+    }
+  });
 });

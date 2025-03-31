@@ -12,6 +12,7 @@ use App\Controllers\Therapist;
  * @var RouteCollection $routes
  */
 $routes->get('/', [Home::class, 'index']);
+$routes->get('register', [Home::class, 'register']);
 
 $routes->group('auth', ['filter' => 'ajax'], function($routes) {
   $routes->post('login', [Home::class, 'attemptLogin']);
@@ -52,10 +53,6 @@ $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes)
     $routes->put('noPresented/(:num)', [[Appointment::class, 'changeStatus'], "$1"]);
     $routes->put('Update/(:num)', [[Appointment::class, 'updateAppointment'], "$1"]);
     $routes->get('getAppointments', [Therapist::class, 'getEvents']);
-    /* $routes->get('/', [Appointment::class, 'index']);
-    $routes->get('getAvailableTherapists', [Appointment::class, 'getAvailableTherapists']);
-    $routes->post('Create', [Appointment::class, 'createAppointment']);
-     */
   });
 });
 

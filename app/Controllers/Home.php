@@ -46,6 +46,35 @@ class Home extends BaseController
 		}
 	}
 
+    public function register() {
+        if (session()->has("logged_in") && session()->get("logged_in")) {
+
+			// Redirigir al dashboard si ya ha iniciado sesión
+			switch (session()->get("profile")) {
+				case 1:
+					return redirect()->to(base_url("admin/"));
+				case 2:
+					return redirect()->to(base_url("therapist/"));
+				case 3:
+				default:
+				return redirect()->to(base_url("patient/"));
+			}
+		} else {
+			$this->LJQueryValidation();
+			$this->content['title'] = "Registro";
+			$this->content['view'] = "register";
+			$this->content['css_add'][] = [
+				'login.css'
+			];
+
+			$this->content['js_add'][] = [
+				'register.js'
+			];
+
+			return view('UI/viewSimple', $this->content);
+		}
+    }
+
     public function Administrator() {
         $this->content['title'] = "Inicio";
         $this->content['view'] = "Administrator/Index";
@@ -196,7 +225,7 @@ class Home extends BaseController
     /**
      * Procesa el registro de usuario mediante Ajax
      */
-    /* public function attemptRegister()
+    public function attemptRegister()
     {
 
         $rules = [
@@ -263,14 +292,14 @@ class Home extends BaseController
         }
 
         // Enviar correo de confirmación (requeriría implementación de envío de correos)
-        $this->sendConfirmationEmail($userData['email'], $userId);
+        //$this->sendConfirmationEmail($userData['email'], $userId);
 
         return $this->respond([
             'status' => 'success',
             'message' => 'Registro exitoso. Por favor revise su correo electrónico para confirmar su cuenta.'
         ], 200);
     }
- */
+
     /**
      * Procesa la solicitud de recuperación de contraseña mediante Ajax
      */

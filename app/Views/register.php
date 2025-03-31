@@ -12,11 +12,21 @@
               <div class="text-center">
                 <img class="w-50 mb-5" src="<?= base_url('assets/img/noPhoto.png') ?>">
               </div>
-              <form id="loginForm" class="formValid" autocomplete="off">
+              <form id="registerForm" autocomplete="off">
                 <div class="form-label-group form-valid">
                   <input id="email" name="email" type="email" value="" minlength="5" class="form-control" placeholder="Correo" required autocomplete="off">
                   <label for="email">Correo</label>
                 </div>
+                <div class="form-label-group form-valid">
+                  <input id="nombre" name="first_name" type="text" class="form-control" placeholder="Nombre" required autocomplete="off">
+                  <label for="nombre">Nombre</label>
+                </div>
+
+                <div class="form-label-group form-valid">
+                  <input id="apellidos" name="last_name" type="text" class="form-control" placeholder="Apellidos" required autocomplete="off">
+                  <label for="apellidos">Apellidos</label>
+                </div>
+                
                 <div class="form-label-group form-valid">
                   <div class="input-group">
                     <input type="password" id="password" name="password" value="" minlength="8" class="form-control" placeholder="Contraseña" required autocomplete="off">
@@ -28,13 +38,21 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-label-group form-valid">
+                  <div class="input-group">
+                    <input type="password" id="password_confirm" name="password_confirm" minlength="8" class="form-control" placeholder="Confirmar Contraseña" required autocomplete="off">
+                    <label for="password_confirm">Confirmar Contraseña</label>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary btn-pass" type="button">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 <button type="submit" id="submitBtn" class="btn btn-lg bg-primary btn-block btn-login text-white text-uppercase font-weight-bold mb-2">
-                  Ingresar <i class="fas fa-sign-in-alt"></i>
+                  Registrarse <i class="fas fa-sign-in-alt"></i>
                 </button>
               </form>
-              <div class="text-center mt-3">
-                <a href="<?= base_url('register') ?>" class="text-muted text-decoration-none">Registrarse</a>
-              </div>
               <p class="mt-5 mb-3 text-muted text-center"><?= date('Y'); ?> &copy; Versión <?= VERSION ?></p>
             </div>
           </div>

@@ -56,7 +56,7 @@ class Therapist extends BaseController
 				Appointment.notes,
 				Appointment.notes_therapist,
 				CONCAT(U.first_name, ' ', U.last_name) AS patientName,
-			")->join("user U", "Appointment.patient_id = U.id")
+			")->join("User U", "Appointment.patient_id = U.id")
 			->where('Appointment.therapist_id', $this->therapist_id);
 
 		if (isset($dataGet->start) && isset($dataGet->end)) {

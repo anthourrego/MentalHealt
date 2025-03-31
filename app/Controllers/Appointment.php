@@ -89,7 +89,7 @@ class Appointment extends BaseController
 				Appointment.video_url,
 				Appointment.notes,
 				CONCAT(U.first_name, ' ', U.last_name) AS therapistName,
-			")->join("user U", "Appointment.therapist_id = U.id")
+			")->join("User U", "Appointment.therapist_id = U.id")
 			->where('Appointment.patient_id', $this->patient_id);
 
 		if (isset($dataGet->start) && isset($dataGet->end)) {

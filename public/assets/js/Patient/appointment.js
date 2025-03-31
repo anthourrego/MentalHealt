@@ -162,7 +162,7 @@ const calendar = new FullCalendar.Calendar(calendarEl, {
     });
 
     // Verificar cuántas citas tiene ya en ese día (opcional)
-    const appointmentsCount = eventsOnDay.filter(event => event.extendedProps.status !== "diary").length;
+    const appointmentsCount = eventsOnDay.filter(event => event.extendedProps.status !== "diary" && event.extendedProps.status !== "CT" && event.extendedProps.status !== "CP").length;
     if (appointmentsCount >= 1) {
       alertify.warning('Ya tienes el máximo de citas permitidas para este día');
       return;
@@ -245,6 +245,8 @@ function showAppointmentDetails(appointmentId, details) {
 function openAppointmentModal(dateStr) {
   // Limpiar selecciones previas
   document.getElementById('appointmentDate').value = dateStr;
+  document.getElementById('reasonText').value = '';
+  document.getElementById('modalitySelect').value = 'IP';
   
   // Si tienes un select para terapeutas, puedes cargarlo aquí
   loadTherapists();
@@ -265,7 +267,7 @@ function loadTherapists() {
   // Mostrar indicador de carga
   selectTherapist.disabled = true;
   selectTime.disabled = true;
-  
+
   $.ajax({
     url: routeBase + 'patient/appointments/getAvailableTherapists',
     type: 'GET',
@@ -332,6 +334,7 @@ function cancelAppointment(appointmentId) {
       if (data.status) {
         alertify.success(data.message || 'Cita cancelada correctamente');
         calendar.refetchEvents();
+        getAppointments();
         appointmentDetailModal.hide();
       } else {
         alertify.error(data.message || 'Error al cancelar la cita');
@@ -458,6 +461,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (data.status) {
             alertify.success(data.message || 'Cita agendada correctamente');
             calendar.refetchEvents();
+            getAppointments();
             appointmentModal.hide();
           } else {
             alertify.error(data.message || 'Error al agendar la cita');

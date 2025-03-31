@@ -194,25 +194,28 @@ class Appointment extends BaseController
 
 		$dataHours = $this->appointmentModel->where('therapist_id', $therapist_id)
 			->where('appointment_date', $dateYmd)
+			->whereNotIn("status", ['CP', 'CT', 'NS'])
 			->findAll();
 		
 		//Creamos un array con los horarios disponibles
 		foreach ($arrayHours as $key => $hour) {
-			$hour = date("H", strtotime($hour["start"]));
+			$hourDetail = date("H", strtotime($hour["start"]));
 
 			//Para dejar seleccionada la fecha actual
-			if ($dateHour == $hour) {
+			if ($dateHour == $hourDetail) {
 				$arrayHours[$key]["selected"] = true;
 			}
 
 			foreach ($dataHours as $dataHour) {
+				$dataHour->appointment_time;
+				$hour["start"];
 				if ($dataHour->appointment_time == $hour["start"]) {
 					$arrayHours[$key]["available"] = false;
 					break;
 				}
 			}
 
-			if ($dateYmd == date("Y-m-d") && $hour <= date("H")) {
+			if ($dateYmd == date("Y-m-d") && $hourDetail <= date("H")) {
 				$arrayHours[$key]["available"] = false;
 			}
 		}
@@ -239,7 +242,7 @@ class Appointment extends BaseController
 		$appointmentData = [
 			'patient_id' => $this->patient_id,
 			'therapist_id' => $dataPost->therapist_id,
-			'status' => 'CO',
+			'status' => ($dataPost->modality == "VC" ? 'PE' : 'CO'),
 			'modality' => $dataPost->modality,
 			'appointment_date' => date("Y-m-d", strtotime($dataPost->date)),
 			'appointment_time' => date("H:i:s", strtotime($dataPost->start_time)),

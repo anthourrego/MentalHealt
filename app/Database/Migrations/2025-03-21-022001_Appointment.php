@@ -64,6 +64,11 @@ class Appointment extends Migration
 				'null'       => true,
 				'comment'    => 'Notas o comentarios adicionales',
 			],
+			'notes_therapist' => [
+				'type'       => 'TEXT',
+				'null'       => true,
+				'comment'    => 'Notas o comentarios adicionales',
+			],
 			'created_at' => [
 				'type'    => 'datetime',
 				'default' => new RawSql('CURRENT_TIMESTAMP'),
@@ -79,7 +84,6 @@ class Appointment extends Migration
 		$this->forge->addKey('id', true);
 		$this->forge->addForeignKey('patient_id', 'User', 'id', 'CASCADE', 'CASCADE');
 		$this->forge->addForeignKey('therapist_id', 'User', 'id', 'CASCADE', 'CASCADE');
-		$this->forge->addKey(['therapist_id', 'appointment_date'], false, true);
 		$this->forge->createTable('Appointment', false, ATRIBUTOSDB);
 	}
 

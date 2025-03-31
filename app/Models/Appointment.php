@@ -69,4 +69,16 @@ class Appointment extends Model
 	protected $afterFind      = [];
 	protected $beforeDelete   = [];
 	protected $afterDelete    = [];
+
+	public function changeStatus(int $id, string $status)
+	{
+		$appointment = $this->find($id);
+		
+		if (!$appointment) {
+			return false;
+		}
+		
+		
+		return $this->update($id, ['status' => $status]);
+	}
 }

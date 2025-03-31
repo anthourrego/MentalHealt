@@ -20,20 +20,22 @@
       <div class="card-header">
         <h5 class="card-title"><i class="fa-solid fa-list"></i> Mis Citas</h5>
       </div>
-      <div class="card-body"></div>
+      <div class="card-body">
+        <div class="list-group" id="listAppoinment"></div>
+      </div>
     </div>
   </div>
   <?= view("Patient/DiaryJournal/card.php"); ?>
 </div>
 
 <!-- Modal para Crear Cita -->
-<div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+<div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="appointmentModalLabel">Agendar Nueva Cita</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span>&times;</span>
         </button>
       </div>
       <form id="formCreateAppointment" class="formValid">
@@ -78,13 +80,13 @@
 </div>
 
 <!-- Modal para Ver Detalles de Cita -->
-<div class="modal fade" id="appointmentDetailModal" tabindex="-1" aria-labelledby="appointmentDetailModalLabel" aria-hidden="true">
+<div class="modal fade" id="appointmentDetailModal" tabindex="-1" aria-labelledby="appointmentDetailModalLabel">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="appointmentDetailModalLabel">Detalles de la Cita</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span>&times;</span>
         </button>
       </div>
       <div class="modal-body">
@@ -109,8 +111,8 @@
         <a id="btnJoinVideoCall" href="#" target="_blank" class="btn btn-success d-none">
           <i class="fas fa-video"></i> Unirse a la videollamada
         </a>
-        <button type="button" id="btnCancelAppointment" class="btn btn-danger">Cancelar Cita</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnCancelAppointment" class="btn btn-danger"><i class="fa-regular fa-calendar-xmark"></i> Cancelar Cita</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
       </div>
     </div>
   </div>

@@ -64,9 +64,9 @@ $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {
     $routes->get('/', [Appointment::class, 'index']);
     $routes->get('getEvents', [Appointment::class, 'getEvents']);
     $routes->get('getAvailableTherapists', [Appointment::class, 'getAvailableTherapists']);
-    $routes->get('getAvailableTimeSlots', [Appointment::class, 'getAvailableTimeSlots']);
+    $routes->get('getAppointments', [Appointment::class, 'getAppointments']);
     $routes->post('Create', [Appointment::class, 'createAppointment']);
-    $routes->delete('cancel/(:num)', [[Appointment::class, 'delete'], "$1"]);
+    $routes->put('cancel/(:num)', [[Appointment::class, 'changeStatus'], "$1"]);
   });
 });
 

@@ -1,5 +1,3 @@
-const dashboard = true;
-
 // Elementos del DOM
 const diaryList = document.getElementById('diary-list');
 const diaryEmpty = document.getElementById('diary-empty');
@@ -41,7 +39,7 @@ function loadDiaryEntries() {
       // Mostrar las entradas
       renderDiaryEntries(data.entries);
 
-      if (dashboard) {
+      if (typeof dashboard != 'undefined' && dashboard == true) {
         calendar.refetchEvents();
       }
     },

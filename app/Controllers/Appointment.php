@@ -53,18 +53,7 @@ class Appointment extends BaseController
 
 	public function getEvents()
 	{
-		$events = $this->appointmentModel->where('patient_id', $this->patient_id)->findAll();
-
-		$formattedEvents = [];
-		foreach ($events as $event) {
-			$formattedEvents[] = [
-				'id' => "C".$event->id,
-				'title' => 'Cita',
-				'start' => $event->appointment_date . 'T' . $event->appointment_time,
-				'color' => $event->status == 'CO' ? '#28a745' : '#ffc107',
-				'status' => $event->status
-			];
-		}
+		$formattedEvents = $this->getAppointments(true);
 
 		$dialy = $this->dairyJournalModel->where('patient_id', $this->patient_id)->findAll();
 		foreach ($dialy as $event) {
@@ -86,7 +75,55 @@ class Appointment extends BaseController
 		return $this->respond($formattedEvents, 200);
 	}
 
+	public function getAppointments($return = false)
+	{
+
+		$this->appointmentModel->select("
+				Appointment.id,
+				Appointment.therapist_id,
+				Appointment.status,
+				Appointment.modality,
+				Appointment.appointment_date,
+				Appointment.appointment_time,
+				Appointment.video_url,
+				Appointment.notes,
+				CONCAT(U.first_name, ' ', U.last_name) AS therapistName,
+			")->join("user U", "Appointment.therapist_id = U.id")
+			->where('Appointment.patient_id', $this->patient_id);
+
+		if ($return === false) {
+			$this->appointmentModel->whereIn("Appointment.status", ['PE', 'CO', 'CT']);
+		}
+
+		$events = $this->appointmentModel->findAll();
+		
+		$formattedEvents = [];
+		foreach ($events as $event) {
+			$formattedEvents[] = [
+				'id' => "C".$event->id,
+				'title' => 'Cita',
+				'start' => $event->appointment_date . 'T' . $event->appointment_time,
+				'color' => $event->status == 'CO' ? '#28a745' : '#ffc107',
+				'status' => $event->status,
+				'formattedDateTime' => date("d/m/Y h:i a", strtotime($event->appointment_date . ' ' . $event->appointment_time)),
+				'modality' => $event->modality,
+				'primary_id' => $event->id,
+				'addNotes' => $event->notes,
+				'therapistName' => $event->therapistName,
+				'video_url' => $event->video_url,
+			];
+		}
+
+		if ($return) {
+			return $formattedEvents;
+		} else {
+			return $this->respond($formattedEvents, 200);
+		}
+	}
+
 	public function getAvailableTherapists() {
+		$dataRequest = (object) $this->request->getGet();
+
 		$resp = [
 			'status' => true,
 			'therapists' => []
@@ -101,7 +138,13 @@ class Appointment extends BaseController
 				'name' => $therapist->first_name,
 				'last_name' => $therapist->last_name,
 				'full_name' => $therapist->getFullName(),
+				'timeSlots' => [],
 			];
+
+			$slots = $this->getAvailableTimeSlots($therapist->id, $dataRequest->date, true);
+			if ($slots["status"]) {
+				$formattedTherapists[count($formattedTherapists) - 1]['timeSlots'] = $slots['timeSlots'];
+			}
 		}
 
 		$resp["therapists"] = $formattedTherapists;
@@ -109,37 +152,62 @@ class Appointment extends BaseController
 		return $this->respond($resp, status: 200);
 	}
 
-	public function getAvailableTimeSlots() {
+	public function getAvailableTimeSlots($therapist_id = null, $date = null, $return = false) {
+		$dataRequest = (object) $this->request->getGet();
+		$therapist_id = $dataRequest->therapist_id ?? $therapist_id;
+		$date = $dataRequest->date ?? $date;
+		$dateYmd = date("Y-m-d", strtotime($date));
+		$dateHour = date("H", strtotime($date));
+
 		$resp = [
 			'status' => false,
 			'message' => 'No se encontraron horarios disponibles'
 		];
+		
+		if (is_null($therapist_id) || is_null($date)) {
+			if ($return) {
+				return $resp;
+			} else {
+				return $this->respond($resp,  400);
+			} 
+		}
 
 		$arrayHours = [
-			["start" => "08:00:00", "end" => "08:59:00", "available" => true],
-			["start" => "09:00:00", "end" => "09:59:00", "available" => true],
-			["start" => "10:00:00", "end" => "10:59:00", "available" => true],
-			["start" => "11:00:00", "end" => "11:59:00", "available" => true],
-			["start" => "12:00:00", "end" => "12:59:00", "available" => true],
-			["start" => "13:00:00", "end" => "13:59:00", "available" => true],
-			["start" => "14:00:00", "end" => "14:59:00", "available" => true],
-			["start" => "15:00:00", "end" => "15:59:00", "available" => true],
-			["start" => "16:00:00", "end" => "16:59:00", "available" => true],
-			["start" => "17:00:00", "end" => "17:59:00", "available" => true]
+			["start" => "08:00:00", "strHour" => "08:00 - 08:59 AM", "available" => true, "selected" => false],
+			["start" => "09:00:00", "strHour" => "09:00 - 09:59 AM", "available" => true, "selected" => false],
+			["start" => "10:00:00", "strHour" => "10:00 - 10:59 AM", "available" => true, "selected" => false],
+			["start" => "11:00:00", "strHour" => "11:00 - 11:59 AM", "available" => true, "selected" => false],
+			["start" => "12:00:00", "strHour" => "12:00 - 12:59 PM", "available" => true, "selected" => false],
+			["start" => "13:00:00", "strHour" => "01:00 - 01:59 PM", "available" => true, "selected" => false],
+			["start" => "14:00:00", "strHour" => "02:00 - 02:59 PM", "available" => true, "selected" => false],
+			["start" => "15:00:00", "strHour" => "03:00 - 03:59 PM", "available" => true, "selected" => false],
+			["start" => "16:00:00", "strHour" => "04:00 - 04:59 PM", "available" => true, "selected" => false],
+			["start" => "17:00:00", "strHour" => "05:00 - 05:59 PM", "available" => true, "selected" => false]
 		];
 
-		$dataRequest = (object) $this->request->getGet();
 
-		$dataHours = $this->appointmentModel->where('therapist_id', $dataRequest->therapist_id)
-			->where('appointment_date', $dataRequest->date)
+		$dataHours = $this->appointmentModel->where('therapist_id', $therapist_id)
+			->where('appointment_date', $dateYmd)
 			->findAll();
+		
 		//Creamos un array con los horarios disponibles
 		foreach ($arrayHours as $key => $hour) {
+			$hour = date("H", strtotime($hour["start"]));
+
+			//Para dejar seleccionada la fecha actual
+			if ($dateHour == $hour) {
+				$arrayHours[$key]["selected"] = true;
+			}
+
 			foreach ($dataHours as $dataHour) {
 				if ($dataHour->appointment_time == $hour["start"]) {
 					$arrayHours[$key]["available"] = false;
 					break;
 				}
+			}
+
+			if ($dateYmd == date("Y-m-d") && $hour <= date("H")) {
+				$arrayHours[$key]["available"] = false;
 			}
 		}
 
@@ -148,6 +216,64 @@ class Appointment extends BaseController
 			'timeSlots' => $arrayHours
 		];
 
-		return $this->respond($resp, status: 200);
+		if ($return) {
+			return $resp;
+		} else {
+			return $this->respond($resp, status: 200);
+		}
+	}
+
+	public function createAppointment() {
+		$dataPost = (object) $this->request->getPost();
+		$resp = [
+			'status' => false,
+			'message' => 'Error al crear la cita'
+		];
+
+		$appointmentData = [
+			'patient_id' => $this->patient_id,
+			'therapist_id' => $dataPost->therapist_id,
+			'status' => 'CO',
+			'modality' => $dataPost->modality,
+			'appointment_date' => date("Y-m-d", strtotime($dataPost->date)),
+			'appointment_time' => date("H:i:s", strtotime($dataPost->start_time)),
+			'notes' => $dataPost->reason
+		];
+
+		$appointment = $this->appointmentModel->insert($appointmentData);
+
+		if ($appointment && empty($this->appointmentModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Cita creada correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->appointmentModel->errors());
+		}
+
+		return $this->respond($resp, 400);
+	}
+
+	public function changeStatus($idAppointment) {
+		$dataRequest = (object) $this->request->getRawInput();
+		$resp = [
+			'status' => false,
+			'message' => 'No se pudo cancelar la cita'
+		];
+
+		$appointment = $this->appointmentModel->changeStatus($idAppointment, $dataRequest->status);
+
+		if ($appointment && empty($this->appointmentModel->errors())) {
+			$resp = [
+				'status' => true,
+				'message' => 'Cita cancelada correctamente'
+			];
+			return $this->respond($resp, 200);
+		} else {
+			$resp['errorsList'] = listErrors($this->appointmentModel->errors());
+		}
+
+		return $this->respond($resp, 400);
 	}
 }

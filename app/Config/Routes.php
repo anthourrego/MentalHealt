@@ -6,6 +6,7 @@ use App\Controllers\Libraries;
 use App\Controllers\Administrator\Users;
 use App\Controllers\Appointment;
 use App\Controllers\Patient;
+use App\Controllers\Therapist;
 
 /**
  * @var RouteCollection $routes
@@ -43,7 +44,18 @@ $routes->group('admin', ['filter' => 'profile:admin'], function($routes) {
 });
 
 $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes) {
-  $routes->get('/', [Home::class, 'therapist']);
+  $routes->get('/', [Therapist::class, 'index']);
+
+  $routes->group('appointments', function($routes) {
+    $routes->get('getEvents', [Therapist::class, 'getEvents']);
+    $routes->put('cancel/(:num)', [[Appointment::class, 'changeStatus'], "$1"]);
+    $routes->put('noPresented/(:num)', [[Appointment::class, 'changeStatus'], "$1"]);
+    $routes->get('getAppointments', [Therapist::class, 'getEvents']);
+    /* $routes->get('/', [Appointment::class, 'index']);
+    $routes->get('getAvailableTherapists', [Appointment::class, 'getAvailableTherapists']);
+    $routes->post('Create', [Appointment::class, 'createAppointment']);
+     */
+  });
 });
 
 $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {

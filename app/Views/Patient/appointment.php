@@ -61,7 +61,7 @@
             <select class="custom-select" id="modalitySelect" name="modality" required>
               <option value="IP">Presencial</option>
               <option value="VC">Videollamada</option>
-              <option value="PC">Llamada telefónica</option>
+              <!-- <option value="PC">Llamada telefónica</option> -->
             </select>
           </div>
           

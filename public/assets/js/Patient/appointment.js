@@ -398,7 +398,11 @@ function getAppointments() {
           listAppoinment.appendChild(listGroup);
         });
       } else {
-        alertify.error(data.message || 'Error al cargar las citas');
+        // No hay citas programadas
+        const listGroup = document.createElement('div');
+        listGroup.className = 'list-group-item text-center';
+        listGroup.textContent = 'No tienes citas programadas';
+        listAppoinment.appendChild(listGroup);
       }
     },
     error: function(xhr, status, error) {
@@ -416,7 +420,7 @@ function getStatusText(status) {
     'CP': 'Cancelada por el paciente',
     'CT': 'Cancelada por el terapeuta',
     'CC': 'Completada',
-    'NO': 'No asistió'
+    'NS': 'No asistió'
   };
   return statusMap[status] || status;
 }

@@ -56,14 +56,6 @@ class Home extends BaseController
         return view('UI/viewDefault', $this->content);
     }
 
-    public function Therapist() {
-        $this->content['title'] = "Inicio";
-        $this->content['view'] = "Therapist/index";
-
-        return view('UI/viewDefault', $this->content);
-    }
-
-
 	/**
 	 * Procesa el formulario de inicio de sesión mediante Ajax
 	 */

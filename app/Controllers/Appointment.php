@@ -77,6 +77,7 @@ class Appointment extends BaseController
 
 	public function getAppointments($return = false)
 	{
+		$dataGet = (object) $this->request->getGet();
 
 		$this->appointmentModel->select("
 				Appointment.id,
@@ -90,6 +91,11 @@ class Appointment extends BaseController
 				CONCAT(U.first_name, ' ', U.last_name) AS therapistName,
 			")->join("user U", "Appointment.therapist_id = U.id")
 			->where('Appointment.patient_id', $this->patient_id);
+
+		if (isset($dataGet->start) && isset($dataGet->end)) {
+			$this->appointmentModel->where('Appointment.appointment_date >=', $dataGet->start)
+				->where('Appointment.appointment_date <=', $dataGet->end);
+		}
 
 		if ($return === false) {
 			$this->appointmentModel->whereIn("Appointment.status", ['PE', 'CO', 'CT']);
@@ -259,7 +265,7 @@ class Appointment extends BaseController
 		$dataRequest = (object) $this->request->getRawInput();
 		$resp = [
 			'status' => false,
-			'message' => 'No se pudo cancelar la cita'
+			'message' => 'No se pudo actualizar la cita'
 		];
 
 		$appointment = $this->appointmentModel->changeStatus($idAppointment, $dataRequest->status);
@@ -267,7 +273,7 @@ class Appointment extends BaseController
 		if ($appointment && empty($this->appointmentModel->errors())) {
 			$resp = [
 				'status' => true,
-				'message' => 'Cita cancelada correctamente'
+				'message' => 'Cita actaulizada correctamente'
 			];
 			return $this->respond($resp, 200);
 		} else {

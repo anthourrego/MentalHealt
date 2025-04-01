@@ -123,6 +123,11 @@ class User extends Model
 			->first();
 
 		if ($user && password_verify($password, $user->password)) {
+
+			if ($user->email_confirm == 0) {
+				return $user;
+			}
+
 			// Actualizar último inicio de sesión
 			$now = \CodeIgniter\I18n\Time::now();
 			$result = $this->update($user->id, ['last_login' => $now]);

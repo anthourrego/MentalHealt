@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Services\EmailService;
 use CodeIgniter\API\ResponseTrait;
 
 class Home extends BaseController
@@ -10,10 +11,12 @@ class Home extends BaseController
 
 	use ResponseTrait; // Para formatear respuestas JSON adecuadamente
 	protected $userModel;
+    protected $emailService;
 
 	public function __construct()
 	{
 		$this->userModel = new User();
+        $this->emailService = new EmailService();
 	}
 
 	public function index()
@@ -131,12 +134,12 @@ class Home extends BaseController
 			], 401);
 		}
 
-		/* if ($user->email_confirm == 0) {
+		if ($user->email_confirm == 0) {
 			return $this->respond([
 				'status' => 'error',
 				'message' => 'Por favor, confirme su correo electrónico antes de iniciar sesión'
 			], 401);
-		} */
+		}
 
 		if ($user->status == 0) {
 			return $this->respond([
@@ -294,198 +297,73 @@ class Home extends BaseController
         // Enviar correo de confirmación (requeriría implementación de envío de correos)
         //$this->sendConfirmationEmail($userData['email'], $userId);
 
+        // Use the same encryption key from environment
+        $key = getenv('encryption.key') ?: 'your-secure-key-here';
+        $iv = substr(hash('sha256', $key), 0, 16);
+        
+        // Encrypt using same algorithm and parameters
+        $encrypted = openssl_encrypt($this->request->getPost('email'), 'AES-256-CBC', $key, 0, $iv);
+        $encodedData = base64_encode($encrypted);
+
+        $this->emailService->sendTemplate(
+            $this->request->getPost('email'),
+            'Bienvenido a MentalHealth',
+            'welcome',
+            [
+                'name' => $this->request->getPost('first_name') . ' ' . $this->request->getPost('last_name'),
+                'email' => $this->request->getPost('email'),
+                'encripted_email' => $encodedData
+            ]
+        );
+
         return $this->respond([
             'status' => 'success',
             'message' => 'Registro exitoso. Por favor revise su correo electrónico para confirmar su cuenta.'
         ], 200);
     }
 
-    /**
-     * Procesa la solicitud de recuperación de contraseña mediante Ajax
-     */
-    /* public function processForgotPassword()
-    {
-        // Verificar si es una solicitud AJAX
-        if (!$this->request->isAJAX()) {
-            return $this->fail('Acceso no permitido', 403);
+    public function confirmEmail() {
+        // Obtener el parámetro de datos de la URL
+        $data = $this->request->getGet('q');
+
+        // Decodificar y desencriptar el parámetro de datos
+        $decodedData = base64_decode($data);
+        $key = getenv('encryption.key') ?: 'your-secure-key-here';
+        $iv = substr(hash('sha256', $key), 0, 16);
+        $decrypted = openssl_decrypt($decodedData, 'AES-256-CBC', $key, 0, $iv);
+
+        if ($decrypted === false) {
+            return $this->showConfirmationResult(false, null, 'Enlace de verificación inválido');
         }
 
-        $rules = ['email' => 'required|valid_email'];
-        $messages = [
-            'email' => [
-                'required' => 'El correo electrónico es obligatorio',
-                'valid_email' => 'Debe ingresar un correo electrónico válido'
-            ]
-        ];
-
-        if (!$this->validate($rules, $messages)) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Error de validación',
-                'errors' => $this->validator->getErrors()
-            ], 400);
-        }
-
-        $email = $this->request->getPost('email');
+        $email = $decrypted;
         $user = $this->userModel->where('email', $email)->first();
 
         if (!$user) {
-            // No revelar si el correo existe para evitar enumeración de usuarios
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Si su correo está registrado, recibirá instrucciones para restablecer su contraseña.'
-            ], 200);
+            return $this->showConfirmationResult(false, null, 'Usuario no encontrado');
         }
 
-        // Generar token de restablecimiento
-        $token = bin2hex(random_bytes(16));
-        
-        // Guardar token en la base de datos (requeriría una tabla para tokens)
-        // $this->userTokenModel->saveResetToken($user->id, $token, time() + (3600 * 24)); // 24 horas
-        
-        // Preparar el enlace de restablecimiento
-        $resetLink = site_url("auth/reset/{$user->id}/{$token}");
-        
-        // Aquí iría el código para enviar el correo electrónico
-        // Ejemplo: service('email')->sendPasswordResetEmail($email, $resetLink);
-        
-        // Para efectos de demostración:
-        log_message('info', "Enlace de restablecimiento para {$email}: {$resetLink}");
+        // Actualizar estado de confirmación de email
+        $this->userModel->update($user->id, ['email_confirm' => 1]);
 
-        return $this->respond([
-            'status' => 'success',
-            'message' => 'Si su correo está registrado, recibirá instrucciones para restablecer su contraseña.'
-        ], 200);
-    } */
+        return $this->showConfirmationResult(true, $user);
+    }
 
     /**
-     * Procesa el restablecimiento de contraseña mediante Ajax
+     * Muestra la pantalla de resultado de confirmación
      */
-    /* public function processResetPassword()
+    private function showConfirmationResult($success, $user = null, $errorMessage = null, $expired = false)
     {
-        // Verificar si es una solicitud AJAX
-        if (!$this->request->isAJAX()) {
-            return $this->fail('Acceso no permitido', 403);
-        }
-
-        $rules = [
-            'password' => 'required|min_length[8]',
-            'password_confirm' => 'required|matches[password]'
+        $data = [
+            'title' => 'Verificación de Email',
+            'success' => $success,
+            'expired' => $expired,
+            'error_message' => $errorMessage,
+            'user' => $user,
+            'userId' => $user ? $user->id : null
         ];
-
-        $messages = [
-            'password' => [
-                'required' => 'La contraseña es obligatoria',
-                'min_length' => 'La contraseña debe tener al menos 8 caracteres'
-            ],
-            'password_confirm' => [
-                'required' => 'La confirmación de contraseña es obligatoria',
-                'matches' => 'Las contraseñas no coinciden'
-            ]
-        ];
-
-        if (!$this->validate($rules, $messages)) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Error de validación',
-                'errors' => $this->validator->getErrors()
-            ], 400);
-        }
-
-        $userId = $this->request->getPost('user_id');
-        $token = $this->request->getPost('token');
         
-        // Verificar el token (requeriría implementación completa)
-        // $isValid = $this->userTokenModel->validateResetToken($userId, $token);
-        $isValid = true; // Para demostración
+        return view('emailConfirmation', $data);
+    }
 
-        if (!$isValid) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'El enlace de restablecimiento no es válido o ha expirado'
-            ], 400);
-        }
-
-        // Actualizar la contraseña
-        $this->userModel->update($userId, [
-            'password' => $this->request->getPost('password')
-        ]);
-        
-        // Eliminar el token usado (requeriría implementación)
-        // $this->userTokenModel->deleteResetToken($userId, $token);
-
-        return $this->respond([
-            'status' => 'success',
-            'message' => 'Su contraseña ha sido restablecida. Ya puede iniciar sesión con su nueva contraseña.',
-            'redirect' => base_url('login')
-        ], 200);
-    } */
-
-    /**
-     * Confirma la cuenta de un usuario
-     */
-    /* public function confirmEmail($userId, $token)
-    {
-        // Verificar el token (requeriría implementación completa)
-        // $isValid = $this->userTokenModel->validateConfirmationToken($userId, $token);
-        $isValid = true; // Para demostración
-
-        if (!$isValid) {
-            return redirect()->to('/login')->with('error', 'El enlace de confirmación no es válido o ha expirado');
-        }
-
-        // Confirmar el correo electrónico
-        $this->userModel->confirmEmail($userId);
-        
-        // Eliminar el token usado (requeriría implementación)
-        // $this->userTokenModel->deleteConfirmationToken($userId, $token);
-
-        return redirect()->to('/login')->with('message', 'Su cuenta ha sido confirmada. Ya puede iniciar sesión.');
-    } */
-
-    /**
-     * Establece una cookie para "recordar sesión"
-     */
-    /* private function setRememberMeCookie(int $userId)
-    {
-        $token = bin2hex(random_bytes(32)); // Genera un token aleatorio
-        $expiry = time() + (86400 * 30); // 30 días
-
-        // Guarda el token en la base de datos (requeriría una tabla para tokens)
-        // $this->userTokenModel->saveToken($userId, $token, $expiry);
-
-        // Establece la cookie
-        setcookie('remember_token', $token, $expiry, '/', '', false, true);
-    } */
-
-    /**
-     * Redirecciona al usuario según su perfil
-     */
-    /* private function redirectByProfile()
-    {
-        $profile = session()->get('profile');
-        $redirectUrl = $this->getRedirectUrlByProfile($profile);
-        return redirect()->to($redirectUrl);
-    } */
-
-    /**
-     * Envía un correo de confirmación (implementación básica)
-     */
-    /* private function sendConfirmationEmail(string $email, int $userId)
-    {
-        // Generar token de confirmación
-        $token = bin2hex(random_bytes(16));
-        
-        // Guardar token en la base de datos (requeriría una tabla para tokens)
-        // $this->userTokenModel->saveConfirmationToken($userId, $token);
-        
-        // Preparar el enlace de confirmación
-        $confirmLink = site_url("auth/confirm/{$userId}/{$token}");
-        
-        // Aquí iría el código para enviar el correo electrónico
-        // Ejemplo: service('email')->sendConfirmationEmail($email, $confirmLink);
-        
-        // Para efectos de demostración:
-        log_message('info', "Enlace de confirmación para {$email}: {$confirmLink}");
-    } */
 }

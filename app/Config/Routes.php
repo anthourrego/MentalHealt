@@ -13,6 +13,7 @@ use App\Controllers\Therapist;
  */
 $routes->get('/', [Home::class, 'index']);
 $routes->get('register', [Home::class, 'register']);
+$routes->get('confirmEmail', [Home::class, 'confirmEmail']);
 
 $routes->group('auth', ['filter' => 'ajax'], function($routes) {
   $routes->post('login', [Home::class, 'attemptLogin']);

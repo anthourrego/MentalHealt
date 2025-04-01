@@ -165,7 +165,7 @@ class Users extends BaseController
 			'last_name' => $dataPost->last_name,
 			'profile' => $dataPost->profile,
 			'status' => 1,
-			"email_confirm" => 0,
+			"email_confirm" => 1,
 			'password' => $dataPost->pass
 		];
 

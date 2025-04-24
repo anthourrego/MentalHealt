@@ -55,6 +55,9 @@ $routes->group('therapist', ['filter' => 'profile:therapist'], function($routes)
     $routes->put('Update/(:num)', [[Appointment::class, 'updateAppointment'], "$1"]);
     $routes->get('getAppointments', [Therapist::class, 'getEvents']);
   });
+
+  $routes->get('diary/(:num)', [[Patient::class, 'index'], "1/$1"]);
+  $routes->get('diary/getEntries', [Patient::class, 'getEntries']);
 });
 
 $routes->group('patient', ['filter' => 'profile:patient'], function($routes) {

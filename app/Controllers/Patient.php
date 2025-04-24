@@ -16,7 +16,7 @@ class Patient extends BaseController
 		$this->dairyJournalModel = new DairyJournal();
 	}
 
-	public function index()
+	public function index($therapistMode = 0, $patient_id = null)
 	{
 		$this->content['title'] = "Mi Diario";
 		$this->content['view'] = "Patient/Index";
@@ -33,6 +33,11 @@ class Patient extends BaseController
 		$this->content['js_add'][] = [
 			'Patient/dailyJournal.js'		
 		];
+
+		$this->content["therapistMode"] = $therapistMode;
+		if ($therapistMode == 1) {
+			session()->set('patient_id', $patient_id);
+		}
 
 		return view('UI/viewDefault', $this->content);
 	}
@@ -78,10 +83,15 @@ class Patient extends BaseController
 	 */
 	public function getEntries()
 	{
+		$include = true;
 		$patientId = session()->get('id');
-		
+		if (session()->has('patient_id')) {
+			$patientId = session()->get('patient_id');
+			$include = false;
+		}
+
 		// Obtener entradas del diario con paginación
-		$entries = $this->dairyJournalModel->getPatientJournals($patientId, true);
+		$entries = $this->dairyJournalModel->getPatientJournals($patientId, $include);
 
 		return $this->respond([
 			'status' => true,

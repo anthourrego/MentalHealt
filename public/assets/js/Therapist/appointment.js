@@ -171,6 +171,7 @@ function showAppointmentDetails(appointmentId, details) {
 	const btnCompleted = document.getElementById('btnCompleted');
 	const btnConfirmed = document.getElementById('btnConfirmed');
 	const btnNoPresented = document.getElementById('btnNoPresented');
+	const btnNotes = document.getElementById('btnNotes');
 	
 	btnCancel.classList.add('d-none');
 	btnJoinCall.classList.add('d-none');
@@ -214,6 +215,9 @@ function showAppointmentDetails(appointmentId, details) {
     btnNoPresented.classList.add('d-none');
     btnCancel.classList.add('d-none');
   }
+
+  console.log(details);
+  btnNotes.onclick = () => redirectPatientNotes(details.patient_id);
   
   // Mostrar el modal
   appointmentDetailModal.show();
@@ -291,6 +295,11 @@ function confirmNoPresentedAppointment(appointmentId) {
       alertify.message('Operación cancelada');
     }
   ).set('labels', {ok:'Si', cancel:'No'});
+}
+
+function redirectPatientNotes($patientId) {
+  const url = routeBase + 'therapist/diary/' + $patientId;
+  window.location = url;
 }
 
 function getAppointments() {

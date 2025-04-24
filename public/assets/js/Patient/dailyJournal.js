@@ -1,3 +1,7 @@
+if (typeof therapistMode === 'undefined') {
+  therapistMode = 0; // Default value if not defined
+}
+
 // Elementos del DOM
 const diaryList = document.getElementById('diary-list');
 const diaryEmpty = document.getElementById('diary-empty');
@@ -9,7 +13,7 @@ const formHourDiary = $('#hourDiary');
 const formDiaryEntryId = document.getElementById('diaryEntryId');
 const diaryEntryModal = $('#diaryEntryModal');
 const labelEntryModal = document.getElementById("diaryEntryModalLabel");
-const generalBaseEntry = routeBase + "patient/diary/";
+const generalBaseEntry = routeBase + (therapistMode == 1 ? "therapist" : "patient") + "/diary/";
 
 // Función para cargar las entradas del diario
 function loadDiaryEntries() {
@@ -100,6 +104,14 @@ function renderDiaryEntries(entries) {
     // Crear elemento de entrada
     const entryElement = document.createElement('div');
     entryElement.className = 'mb-3 px-2';
+
+    let btnDelete = '';
+    if (therapistMode != 1) {
+      btnDelete = `<button class="btn btn-sm btn-outline-danger btn-delete-entry" data-id="${entry.id}">
+                      <i class="fas fa-trash"></i> Eliminar
+                    </button>`;
+    }
+
     entryElement.innerHTML = `
       <div class="diary-entry card mb-0">
         <div class="card-header ${moodClass} d-flex justify-content-between align-items-center">
@@ -114,11 +126,9 @@ function renderDiaryEntries(entries) {
         </div>
         <div class="card-footer bg-light text-center">
           <button class="btn btn-sm btn-outline-secondary me-2 btn-edit-entry" data-id="${entry.id}">
-            <i class="fas fa-edit"></i> Editar
+            ${therapistMode == 1 ? '<i class="fas fa-eye"></i> Ver' : '<i class="fas fa-edit"></i> Editar'}
           </button>
-          <button class="btn btn-sm btn-outline-danger btn-delete-entry" data-id="${entry.id}">
-            <i class="fas fa-trash"></i> Eliminar
-          </button>
+          ${btnDelete}
         </div>
       </div>
     `;

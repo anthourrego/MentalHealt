@@ -4,9 +4,11 @@
       <?php if (isset($dashboard) && $dashboard === true) { ?>
       <h5 class="card-title"><i class="fa-solid fa-book"></i> Mi Diario</h5>
       <?php } ?>
+      <?php if (!isset($therapistMode) || $therapistMode == 0) { ?>
       <button class="btn btn-primary ml-auto" id="btnNewDiaryEntry">
         <i class="fas fa-plus"></i> Nueva entrada
       </button>
+      <?php } ?>
     </div>
     <div class="card-body">
       <div id="diary-loading" class="text-center" style="display: none;">

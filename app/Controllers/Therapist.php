@@ -87,6 +87,7 @@ class Therapist extends BaseController
 				'patientName' => $event->patientName,
 				'video_url' => $event->video_url,
 				'currentDate' => (date("Y-m-d") == $event->appointment_date) ? true : false,
+				'patient_id' => $event->patient_id
 			];
 		}
 

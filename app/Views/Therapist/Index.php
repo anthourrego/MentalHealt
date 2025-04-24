@@ -86,6 +86,7 @@
         </a>
         <button type="submit" id="btnCompleted" form="formCompleted" class="btn btn-success"><i class="fa-solid fa-check"></i> Completada</button>
         <button type="submit" id="btnConfirmed" form="formConfirmed" class="btn btn-success"><i class="fa-solid fa-check"></i> Confirmado</button>
+        <button type="submit" id="btnNotes" class="btn btn-primary"><i class="fa-regular fa-address-book"></i> Ver Notas</button>
         <button type="button" id="btnNoPresented" class="btn btn-secondary"><i class="fa-solid fa-users-slash"></i> No Presentado</button>
         <button type="button" id="btnCancelAppointment" class="btn btn-danger"><i class="fa-regular fa-calendar-xmark"></i> Cancelar Cita</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>

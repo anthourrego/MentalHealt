@@ -44,7 +44,7 @@ $(function(){
 		if (minLength) strength++;
 		
 		// Nivel mínimo requerido (puedes ajustar según necesites)
-		return strength >= 3;
+		return strength >= 5;
 	}, "La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y caracteres especiales.");
 
 

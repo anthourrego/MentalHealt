@@ -16,7 +16,15 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost:8080/';
+    public string $baseURL = 'https://mentalhealth.gomariwms.com/';
+
+    // Configuración de cookies
+    public $cookiePrefix   = '';
+    public $cookieDomain   = '';
+    public $cookiePath     = '/';
+    public $cookieSecure   = true;  // Activa cookies seguras para HTTPS
+    public $cookieHTTPOnly = true;  // Protege contra ataques XSS
+    public $cookieSameSite = 'Lax'; // O 'Strict' para mayor seguridad
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

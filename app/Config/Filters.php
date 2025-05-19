@@ -14,6 +14,7 @@ use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\Ajax;
 use App\Filters\ProfileFilter;
+use App\Filters\HttpsSecurityFilter; // Importar el filtro de seguridad HTTPS
 
 class Filters extends BaseFilters
 {
@@ -38,6 +39,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'https_security' => HttpsSecurityFilter::class, // Registrar el filtro de seguridad HTTPS
     ];
 
     /**
@@ -81,6 +83,7 @@ class Filters extends BaseFilters
         'after' => [
             // 'honeypot',
             // 'secureheaders',
+            'https_security', // Filtro de seguridad HTTPS
         ],
     ];
 
